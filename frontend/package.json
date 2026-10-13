@@ -4,7 +4,9 @@
   "description": "Frontend estático de RaícesGT (Artesanías y Textiles Mayas, S.A.)",
   "scripts": {
     "build:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --minify",
-    "watch:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --watch"
+    "watch:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --watch",
+    "build:datos": "node scripts/exportar-catalogo.js",
+    "build": "npm run build:css && npm run build:datos"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "0.1.1",

@@ -62,6 +62,18 @@ o abre `frontend/public/index.html` con la extensión **Live Server** de VS Code
 
 > **Importante:** si abres los HTML sin haber ejecutado `npm run build:css` o `npm run watch:css`, la página se verá **sin estilos**. El archivo `styles.css` se genera; no se sube a GitHub.
 
+### App Android
+
+Instala **Expo Go** en tu celular y ejecuta:
+
+```bash
+cd mobile
+npm install
+npx expo start
+```
+
+Escanea el código QR con Expo Go. Más detalles en [`mobile/README.md`](mobile/README.md).
+
 ### Variables de entorno (backend y base de datos)
 
 El backend y Oracle usan un archivo `.env` con contraseñas que **no** debe subirse a GitHub. Copia la plantilla y pide los valores al responsable del proyecto:
@@ -79,7 +91,7 @@ cp .env.example .env
 ├── .env.example              # Plantilla de variables de entorno (sin contraseñas)
 ├── backend/                  # API (el código completo está en la rama "frontend")
 ├── oracle/                   # Base de datos Oracle
-├── mobile/                   # App Android (pendiente: React Native + Expo)
+├── mobile/                   # App Android (React Native + Expo) — ver mobile/README.md
 └── frontend/
     ├── Dockerfile            # Compila Tailwind y sirve el sitio con nginx
     ├── package.json          # Scripts build:css y watch:css
@@ -157,6 +169,8 @@ Edita `frontend/tailwind.config.js` (sección `colors`) y reconstruye.
 - [x] Imágenes renombradas sin espacios (`traje-01.jpeg`…)
 - [x] Tailwind compilado en el build en lugar del CDN de desarrollo
 - [x] Favicon
+- [x] La web genera `data/productos.json` al construirse, para que la app use el mismo catálogo
+- [x] App Android inicial (React Native + Expo): Inicio, Colección con filtros y vista columnas/lista, detalle, contacto
 
 ---
 
@@ -197,7 +211,7 @@ Estos puntos se evaluaron y **no se van a implementar**:
 
 - [ ] Página **“Sobre nosotros”**: quiénes son y con qué artesanas o comunidades trabajan.
 - [ ] Cuenta de **TikTok** (opcional). Se agrega en `config.js`.
-- [ ] App para Android (`mobile/`): sin empezar. Propuesta: React Native con Expo, consumiendo el mismo API que la web.
+- [ ] **App Android** (`mobile/`): versión inicial lista con React Native + Expo (Inicio, Colección con filtros, detalle y contacto). Pendientes en [`mobile/README.md`](mobile/README.md): HTTPS, conectar al API, pruebas en varios celulares y publicación en Google Play.
 - [ ] Estadísticas de visitas (Google Analytics o similar).
 
 ---
