@@ -79,7 +79,7 @@ cp .env.example .env
 ├── .env.example              # Plantilla de variables de entorno (sin contraseñas)
 ├── backend/                  # API (el código completo está en la rama "frontend")
 ├── oracle/                   # Base de datos Oracle
-├── mobile/                   # App móvil (pendiente)
+├── mobile/                   # App Android (pendiente: React Native + Expo)
 └── frontend/
     ├── Dockerfile            # Compila Tailwind y sirve el sitio con nginx
     ├── package.json          # Scripts build:css y watch:css
@@ -178,13 +178,13 @@ Ordenado por prioridad. Los marcados con 🔴 deben resolverse antes de publicar
 - [ ] **Conectar el catálogo al API** (`GET /products`) en lugar de `js/producto.js`. Así los productos se manejan desde el panel sin tocar código ni reconstruir Docker.
 - [ ] **Guardar desde `admin.html` directo en la base de datos**, incluyendo la subida de fotos.
 
-### 🟠 Decisiones del equipo
+### ✅ Decisiones del equipo (octubre 2026)
 
-- [ ] **Mostrar precios o no.** Opciones: precio exacto, “desde Q…” por categoría, o seguir con “Consulta precio”. Si se muestran, se puede agregar un filtro por rango de precio.
-- [ ] **Carrito y pedidos en línea.** El backend ya tiene `POST /sales-orders` y facturas, pero falta la pantalla. Alternativa sencilla: un carrito que arme un solo mensaje de WhatsApp con varios productos.
-- [ ] **Convertir imágenes a WebP.** Hoy son ~8.8 MB y algunas pasan de 1 MB.
-  - Ventajas: 5–10 veces más livianas, carga más rápida en celular, mejor posición en Google.
-  - Desventajas: hay que convertir cada foto nueva (se puede automatizar en el build) y se pierde calidad si se comprime de más.
+Estos puntos se evaluaron y **no se van a implementar**:
+
+- **No se muestran precios.** El sitio sigue con “Consulta precio y disponibilidad” por WhatsApp. El campo `precio` se mantiene en los datos solo para uso interno.
+- **No habrá carrito ni pedidos en línea.** Las ventas se coordinan por WhatsApp.
+- **No se comprimen ni convierten las imágenes.** Se conservan las fotos originales.
 
 ### 🟡 SEO y redes sociales
 
@@ -197,7 +197,7 @@ Ordenado por prioridad. Los marcados con 🔴 deben resolverse antes de publicar
 
 - [ ] Página **“Sobre nosotros”**: quiénes son y con qué artesanas o comunidades trabajan.
 - [ ] Cuenta de **TikTok** (opcional). Se agrega en `config.js`.
-- [ ] App móvil (`mobile/`): sin empezar.
+- [ ] App para Android (`mobile/`): sin empezar. Propuesta: React Native con Expo, consumiendo el mismo API que la web.
 - [ ] Estadísticas de visitas (Google Analytics o similar).
 
 ---
@@ -209,7 +209,7 @@ Estos textos y datos se escribieron o corrigieron con la información disponible
 - [ ] **Descripciones de los 42 productos** (`js/producto.js`): confirmar que la información de cada pieza sea correcta.
 - [ ] **“San Lucas” (productos #8 y #12)**: están en el departamento *Guatemala*. ¿Es San Lucas Sacatepéquez, San Lucas Tolimán u otro?
 - [ ] **“Sacatepéquez” (#26)** y **“San Pedro” (#36)**: el municipio está incompleto.
-- [ ] **Precios que parecen inconsistentes**:
+- [ ] **Precios que parecen inconsistentes** (no se muestran en el sitio, pero se usan al responder consultas):
   - #1 “Traje de Patzún” completo a **Q350**, mientras varias blusas cuestan Q3,500.
   - Blusas de Patzún entre **Q1,900 y Q3,500**; las de San Lucas Tolimán cuestan **Q900**.
 - [ ] **Privacidad, Términos y Sostenibilidad**: son textos base. Confirmar, entre otras cosas:
