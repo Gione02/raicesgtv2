@@ -303,6 +303,7 @@
     document.getElementById("modal-categoria").textContent = producto.categoria;
     document.getElementById("modal-municipio").textContent = `${producto.municipio}, ${producto.departamento}`;
     document.getElementById("modal-color").textContent = producto.color;
+    document.getElementById("modal-enlace").href = `./producto.html?id=${producto.id}`;
 
     modal.classList.remove("hidden");
     setTimeout(() => {
