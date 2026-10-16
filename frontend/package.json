@@ -5,8 +5,9 @@
   "scripts": {
     "build:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --minify",
     "watch:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --watch",
+    "build:og": "node scripts/open-graph.js",
     "build:datos": "node scripts/exportar-catalogo.js",
-    "build": "npm run build:css"
+    "build": "npm run build:og && npm run build:css"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "0.1.1",

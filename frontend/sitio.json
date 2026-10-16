@@ -1,0 +1,7 @@
+{
+  "nombre": "RaícesGT",
+  "url": "",
+  "imagenCompartir": "img/compartir.jpg",
+  "imagenSinDominio": "https://epfyswdzqwkryvyuqycd.supabase.co/storage/v1/object/public/catalogo/compartir.jpg",
+  "paginasPrivadas": ["admin.html"]
+}

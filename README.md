@@ -99,19 +99,23 @@ La configuración inicial de las tablas, los permisos y el usuario administrador
 ## 2. Estructura del proyecto
 
 ```
+├── PUBLICAR.md               # Guía: dominio, HTTPS, Open Graph y Google Play
 ├── docker-compose.yml        # Sirve la web con nginx
 ├── .env.example              # Referencia de los datos de conexión (sin claves secretas)
 ├── supabase/                 # SQL de tablas y permisos + carga inicial — ver supabase/README.md
 ├── mobile/                   # App Android (React Native + Expo) — ver mobile/README.md
 └── frontend/
     ├── Dockerfile            # Compila Tailwind y sirve el sitio con nginx
-    ├── package.json          # Scripts build:css y watch:css
+    ├── package.json          # Scripts build, build:css, watch:css y build:og
+    ├── sitio.json            # Dominio e imagen para compartir (Open Graph)
+    ├── scripts/open-graph.js # Escribe las etiquetas Open Graph en cada página
     ├── tailwind.config.js    # Colores, tipografías y tamaños del diseño
     ├── src/input.css         # Estilos propios (franja textil, páginas de texto)
     └── public/               # Lo que se publica
         ├── index.html        # Inicio
         ├── productos.html    # Catálogo con buscador, filtros y vista columnas/lista
         ├── producto.html     # Página de un producto: producto.html?id=12
+        ├── nosotros.html     # Sobre nosotros
         ├── contacto.html     # Formulario que abre WhatsApp + preguntas frecuentes
         ├── privacidad.html   # Política de privacidad (texto base)
         ├── terminos.html     # Términos de servicio (texto base)
@@ -190,6 +194,8 @@ Edita `frontend/tailwind.config.js` (sección `colors`) y reconstruye.
 - [x] Imágenes renombradas sin espacios (`traje-01.jpeg`…)
 - [x] Tailwind compilado en el build en lugar del CDN de desarrollo
 - [x] Favicon
+- [x] **Open Graph** en todas las páginas públicas: tarjeta con imagen, título y descripción al compartir (`npm run build:og`)
+- [x] Página **Sobre nosotros** (`nosotros.html`) en la web y en la app, con los departamentos de origen calculados del catálogo
 - [x] App Android inicial (React Native + Expo): Inicio, Colección con filtros y vista columnas/lista, detalle, contacto
 
 ---
@@ -227,14 +233,14 @@ Estos puntos se evaluaron y **no se van a implementar**:
 
 ### 🟡 SEO y redes sociales
 
-- [ ] Etiquetas **Open Graph** para que al compartir un enlace en WhatsApp o Facebook aparezca foto y título.
+- [ ] Subir `frontend/public/img/compartir.jpg` al bucket `catalogo` de Supabase, para que la imagen de vista previa funcione antes de tener dominio.
+- [ ] Vista previa con la foto de **cada producto** (requiere hosting con funciones; ver [`PUBLICAR.md`](PUBLICAR.md), sección 3).
 - [ ] `sitemap.xml` y `robots.txt`.
 - [ ] Registrar el sitio en **Google Search Console** cuando tenga dominio.
 - [ ] Generar las páginas de producto en el servidor, para que Google lea su contenido sin ejecutar JavaScript.
 
 ### 🟡 Otros
 
-- [ ] Página **“Sobre nosotros”**: quiénes son y con qué artesanas o comunidades trabajan.
 - [ ] Cuenta de **TikTok** (opcional). Se agrega en `config.js`.
 - [ ] **App Android** (`mobile/`): versión inicial lista con React Native + Expo (Inicio, Colección con filtros, detalle y contacto). Ya lee de Supabase. Pendientes en [`mobile/README.md`](mobile/README.md): pruebas en varios celulares y publicación en Google Play.
 - [ ] Estadísticas de visitas (Google Analytics o similar).
@@ -257,11 +263,13 @@ Estos textos y datos se escribieron o corrigieron con la información disponible
   - tiempos y costos de envío,
   - qué se dice sobre el trabajo con artesanas.
 - [ ] **Preguntas frecuentes** de `contacto.html`.
-- [ ] **Sección “Nuestra historia”** del inicio: hoy es un texto general.
+- [ ] **Sección “Nuestra historia”** del inicio y **página “Sobre nosotros”**: hoy tienen un texto general. Busquen los comentarios `<!-- EQUIPO: ... -->` en `nosotros.html` y cuenten su historia real. Si las artesanas lo autorizan, se pueden agregar sus perfiles. Si cambian el texto, actualicen también `mobile/src/app/nosotros.js`.
 
 ---
 
 ## 7. Pasos para publicarlo en internet
+
+> **Guía completa** —dominio recomendado, Cloudflare Pages con HTTPS, Open Graph y Google Play paso a paso—: [`PUBLICAR.md`](PUBLICAR.md).
 
 Hoy el sitio corre en `http://localhost` o en el servidor de prueba del equipo, sin dominio ni HTTPS. Para que el público lo vea:
 

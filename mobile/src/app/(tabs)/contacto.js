@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router } from "expo-router";
 import { useState } from "react";
 import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -37,6 +38,14 @@ export default function Contacto() {
     <ScrollView contentContainerStyle={estilos.contenido}>
       <Text style={estilos.titulo}>Hablemos de tu próximo textil</Text>
       <Text style={estilos.parrafo}>Consulta precios, medidas, disponibilidad y opciones de envío. Te respondemos por WhatsApp.</Text>
+
+      <Pressable style={({ pressed }) => [estilos.tarjeta, estilos.filaNosotros, pressed && { opacity: 0.85 }]} onPress={() => router.push("/nosotros")}>
+        <View style={{ flex: 1 }}>
+          <Text style={estilos.tituloTarjeta}>Sobre RaícesGT</Text>
+          <Text style={estilos.textoTarjeta}>Conoce nuestra historia y de dónde vienen nuestras piezas.</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color={colores.primario} />
+      </Pressable>
 
       <View style={estilos.tarjeta}>
         <Text style={estilos.tituloTarjeta}>WhatsApp</Text>
@@ -77,6 +86,7 @@ const estilos = StyleSheet.create({
   contenido: { padding: 16, paddingBottom: 32, gap: 12 },
   titulo: { fontSize: 28, lineHeight: 32, fontWeight: "900", color: colores.texto, letterSpacing: -0.8, marginTop: 8 },
   parrafo: { fontSize: 15, lineHeight: 22, color: colores.textoSuave, marginBottom: 4 },
+  filaNosotros: { flexDirection: "row", alignItems: "center", gap: 12 },
   tarjeta: { backgroundColor: colores.superficie, borderRadius: 16, borderWidth: 1, borderColor: colores.borde, padding: 18 },
   tituloTarjeta: { fontSize: 17, fontWeight: "800", color: colores.texto },
   textoTarjeta: { color: colores.textoSuave, marginTop: 4 },

@@ -30,6 +30,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="producto/[id]" options={{ title: "Producto", headerBackTitle: "Volver" }} />
+        <Stack.Screen name="nosotros" options={{ title: "Sobre nosotros", headerBackTitle: "Volver" }} />
       </Stack>
     </CatalogoProvider>
   );

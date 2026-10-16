@@ -96,6 +96,10 @@ export default function Inicio() {
             </View>
           </View>
         ))}
+        <Pressable style={({ pressed }) => [estilos.enlaceNosotros, pressed && { opacity: 0.7 }]} onPress={() => router.push("/nosotros")}>
+          <Text style={estilos.textoEnlace}>Conoce nuestra historia</Text>
+          <Ionicons name="arrow-forward" size={16} color={colores.secundario} />
+        </Pressable>
         <BotonWhatsApp onPress={() => abrirWhatsApp()} estilo={{ marginTop: 8 }} />
       </View>
     </ScrollView>
@@ -167,6 +171,8 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  enlaceNosotros: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingVertical: 10 },
+  textoEnlace: { color: colores.secundario, fontWeight: "700" },
   tituloBeneficio: { fontWeight: "800", color: colores.texto, fontSize: 15 },
   textoBeneficio: { color: colores.textoSuave, fontSize: 13, marginTop: 2 },
 });

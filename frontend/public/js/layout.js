@@ -18,12 +18,13 @@
   const ENLACES = [
     { id: "inicio", texto: "Inicio", href: "./index.html" },
     { id: "productos", texto: "Colección", href: "./productos.html" },
-    { id: "historia", texto: "Nuestra historia", href: "./index.html#historia" },
+    { id: "nosotros", texto: "Nosotros", href: "./nosotros.html" },
     { id: "envios", texto: "Envíos", href: "./index.html#envios" },
     { id: "contacto", texto: "Contacto", href: "./contacto.html" },
   ];
 
   const LEGALES = [
+    { texto: "Sobre nosotros", href: "./nosotros.html" },
     { texto: "Privacidad", href: "./privacidad.html" },
     { texto: "Términos de servicio", href: "./terminos.html" },
     { texto: "Sostenibilidad", href: "./sostenibilidad.html" },

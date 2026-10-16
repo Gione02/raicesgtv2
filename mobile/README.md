@@ -45,7 +45,7 @@ Todo está en **`src/config.js`**:
 | Dato | Para qué sirve |
 |---|---|
 | `supabase` | Dirección del proyecto y clave *publishable* (pública por diseño) |
-| `servidor` | Dirección de la web, para los enlaces de “Compartir” |
+| `servidor` | Dirección de la web, para los enlaces de “Compartir” (cámbiala cuando tengan dominio; ver `PUBLICAR.md`) |
 | `whatsapp` | Número con código de país, sin espacios |
 | `redes` | Facebook, Instagram, TikTok (las vacías no se muestran) |
 
@@ -98,4 +98,4 @@ Publicar en Google Play requiere una **cuenta de desarrollador**, con un pago ú
 
 - [ ] Cuando la web tenga dominio, cambiar `servidor` en `src/config.js` para que los enlaces de “Compartir” apunten ahí.
 - [ ] Probar en varios celulares Android, con pantallas pequeñas y grandes.
-- [ ] Crear la cuenta de Google Play y preparar la ficha de la tienda: capturas, descripción y política de privacidad (se puede usar `privacidad.html` de la web).
+- [ ] Crear la cuenta de Google Play y preparar la ficha. Paso a paso, textos de la ficha e imágenes listas en [`PUBLICAR.md`](../PUBLICAR.md) y `assets/play/`.
