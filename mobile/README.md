@@ -88,6 +88,7 @@ npx eas-cli@latest login      # cuenta gratuita en expo.dev
 npm run build:apk             # = eas build -p android --profile apk
 ```
 
+- Si la instalación de dependencias falla en EAS con *“package.json and package-lock.json … not in sync”*, instala los paquetes con `npx expo install` (no con `npm install`) y vuelve a intentar. Así se resolvió el primer build.
 - La primera vez pide crear el proyecto en Expo (responde **Y**) y generar la firma de Android (deja que EAS la genere).
 - Al terminar aparece un **enlace y un código QR** para descargar el `.apk`. En el plan gratuito puede tardar desde minutos hasta más de una hora en horas pico.
 - **Para instalarlo:** abre el enlace en el celular, permite *Instalar apps de fuentes desconocidas* y, si aparece Play Protect, elige **Instalar de todas formas**.
@@ -100,5 +101,6 @@ Guía completa: [`PUBLICAR.md`](../PUBLICAR.md), sección 4.
 ## Pendientes de la app
 
 - [x] `servidor` en `src/config.js` apunta a la web publicada (`https://raicesgt.pages.dev`).
-- [ ] Generar el APK e instalarlo en los celulares del equipo.
+- [x] APK v1.0.0 generado: [descargar](https://expo.dev/artifacts/eas/p_8B2rf4Sp_45U3Ief8TsWwe_Rixu2g2R089LTYYSiY.apk).
+- [ ] Instalarlo en los celulares del equipo y guardar una copia del `.apk` en Drive.
 - [ ] Probar en varios celulares Android, con pantallas pequeñas y grandes.

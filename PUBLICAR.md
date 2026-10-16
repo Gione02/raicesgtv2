@@ -83,6 +83,8 @@ Que al compartir **un producto** aparezca **su propia foto**. WhatsApp no ejecut
 - Para comprobarlo: en la pestaña **Contacto**, al final, debe decir **“actualizado desde el servidor”**.
 
 ### Generar el APK (gratis)
+
+> ✅ La versión **1.0.0** ya se generó el 16/10/2026 (proyecto `raicesgt` en la cuenta de Expo `gione02`): [descargar APK](https://expo.dev/artifacts/eas/p_8B2rf4Sp_45U3Ief8TsWwe_Rixu2g2R089LTYYSiY.apk). Estos pasos son para versiones nuevas.
 1. Crea una cuenta gratis en [expo.dev](https://expo.dev/signup).
 2. En la terminal:
 
@@ -118,6 +120,6 @@ Cuando cambien algo **en el código de la app**:
 3. ✅ Open Graph activo con la dirección publicada.
 4. ✅ La app apunta a la web publicada para el botón **Compartir**.
 5. ⬜ Probar la vista previa en WhatsApp u opengraph.xyz (sección 3).
-6. ⬜ Generar el APK e instalarlo en los celulares (sección 4).
+6. ✅ APK v1.0.0 generado: [descargar](https://expo.dev/artifacts/eas/p_8B2rf4Sp_45U3Ief8TsWwe_Rixu2g2R089LTYYSiY.apk). ⬜ Instalarlo y probarlo en los celulares (sección 4).
 7. ⬜ Registrar el stock y el costo reales desde `/admin`.
 8. ⬜ Antes de cada presentación, abrir la web para confirmar que Supabase no esté pausado.
