@@ -134,15 +134,21 @@ La configuración inicial de las tablas, los permisos y el usuario administrador
 
 ## 3. Tareas comunes
 
-### Agregar o editar un producto
+### Panel de administración (`admin.html`)
 
-1. Abre `admin.html` en el sitio publicado o en `http://localhost/admin.html`.
-2. Inicia sesión con tu cuenta de administrador. Las cuentas se crean en Supabase; ver [`supabase/README.md`](supabase/README.md).
-3. Pulsa **+ Nuevo producto** o **Editar**, llena los datos, elige la foto y pulsa **Guardar**.
+Abre `admin.html` en el sitio publicado o en `http://localhost/admin.html` e inicia sesión con tu cuenta de administrador. Las cuentas se crean en Supabase; ver [`supabase/README.md`](supabase/README.md). La primera vez aparece una guía corta.
 
-El cambio aparece **al instante** en la web y en la app, sin reconstruir Docker. Los productos con id más alto aparecen como “recién agregados” en el inicio.
+**Pestaña Catálogo**
+- **+ Agregar producto**: arrastra la foto, elige la categoría con un botón, llena los datos y mira la **vista previa** de cómo se verá en la web.
+- Interruptor **Visible** en cada tarjeta: oculta o muestra un producto con un clic, sin borrarlo.
+- Filtros por estado (Todos / Visibles / Ocultos) y por categoría.
 
-Para ocultar un producto sin borrarlo, desmarca **Visible en el catálogo**.
+**Pestaña Inventario** (privada)
+- Resumen: piezas en stock, valor a precio de venta y a costo, stock bajo y agotados.
+- Botones **Venta**, **Entrada** y **Ajustar** en cada producto: el stock se actualiza solo y queda en el historial. Si una venta deja el producto en 0, ofrece ocultarlo del catálogo.
+- **Descargar Excel (CSV)** con todo el inventario.
+
+Todo aparece **al instante** en la web y en la app, sin reconstruir Docker. Los productos con id más alto aparecen como “recién agregados” en el inicio.
 
 Reglas para los datos:
 
@@ -176,7 +182,8 @@ Edita `frontend/tailwind.config.js` (sección `colors`) y reconstruye.
 - [x] Descripciones nuevas para los 42 productos y datos normalizados (tildes, categorías, nombres)
 - [x] Páginas de Contacto, Privacidad, Términos y Sostenibilidad
 - [x] Catálogo en **Supabase**: la web y la app leen la misma base de datos
-- [x] Panel `admin.html` con inicio de sesión: crear, editar, ocultar y eliminar productos, y subir fotos
+- [x] Panel `admin.html` pensado para el personal del negocio: tarjetas con foto, interruptor Visible, foto arrastrable, vista previa, guía de bienvenida, cómodo en el celular
+- [x] **Inventario** privado: stock, costo, margen, aviso de stock bajo, ventas/entradas/ajustes con historial y exportación a Excel
 - [x] El precio y el costo no se publican (permisos por columna en Supabase)
 - [x] Se retiraron Oracle y el API en FastAPI (el código sigue en la rama `frontend` del repositorio original)
 - [x] Íconos que mostraban texto (“search”, “arrow_forward”) reemplazados por SVG
@@ -193,20 +200,22 @@ Ordenado por prioridad. Los marcados con 🔴 deben resolverse antes de publicar
 
 ### 🔴 Seguridad
 
-- [ ] **Apagar el servidor Oracle** (`163.192.133.68`, puerto 1521, abierto a internet) y **cambiar sus contraseñas**. Ya no se usa, y el `.env` con esas contraseñas quedó en el historial de Git. Desde ahora `.env` ya no se versiona.
-- [ ] **Desactivar los registros públicos en Supabase** (Authentication → “Allow new users to sign up”). Ver [`supabase/README.md`](supabase/README.md), paso 5.
+- [x] Servidor Oracle (`163.192.133.68`): el puerto 1521 ya no responde (comprobado el 16/10/2026). Si se vuelve a encender, cambiar antes sus contraseñas: están en el historial de Git. `.env` ya no se versiona.
+- [x] Registros públicos desactivados en Supabase (comprobado el 16/10/2026).
 - [x] Login real en `admin.html` (Supabase Auth + lista de administradores).
 
 ### 🔴 Configuración de Supabase (una sola vez)
 
 Pasos detallados en [`supabase/README.md`](supabase/README.md):
 
-- [ ] Ejecutar `supabase/01_esquema.sql` (tablas y permisos).
+- [ ] Ejecutar `supabase/01_esquema.sql` **completo**, incluida la parte de Storage (tablas, permisos y fotos).
 - [ ] Ejecutar `supabase/02_productos.sql` (los 42 productos).
+- [ ] Ejecutar `supabase/03_inventario.sql` (inventario e historial).
 - [ ] Crear el usuario administrador y agregar su correo a `administradores`.
+- [ ] Registrar el stock real y el costo de cada producto desde el panel.
 - [x] Fotos en el bucket `catalogo` (ya estaban las 43).
 
-Hasta que se ejecute `02_productos.sql`, la web y la app muestran solo el producto de ejemplo que hay hoy en Supabase.
+Mientras `product` esté vacía, la web y la app muestran la copia de respaldo con los 42 productos.
 
 ### ✅ Decisiones del equipo (octubre 2026)
 

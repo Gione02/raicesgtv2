@@ -2,11 +2,13 @@
 
 Supabase reemplaza a Oracle y al API en FastAPI. Guarda:
 
-| Qué | Dónde en Supabase |
-|---|---|
-| Productos del catálogo | Tabla `product` |
-| Fotos | Storage → bucket público `catalogo` |
-| Quién puede editar | Tabla `administradores` + usuarios en Authentication |
+| Qué | Dónde en Supabase | ¿Público? |
+|---|---|---|
+| Productos del catálogo | Tabla `product` | Sí (sin precio) |
+| Fotos | Storage → bucket `catalogo` | Sí |
+| Inventario: stock, costo, aviso, artesana | Tabla `inventario` | No, solo administradores |
+| Historial de ventas, entradas y ajustes | Tabla `inventario_movimientos` | No, solo administradores |
+| Quién puede administrar | Tabla `administradores` + usuarios en Authentication | No |
 
 La web (`frontend/`) y la app (`mobile/`) leen **directo** de Supabase con la clave *publishable*. Ya no hace falta un servidor de API.
 
@@ -18,34 +20,40 @@ La web (`frontend/`) y la app (`mobile/`) leen **directo** de Supabase con la cl
 
 ## Configuración inicial (una sola vez)
 
-### 1. Crear las tablas y los permisos
+En [supabase.com](https://supabase.com) → tu proyecto → **SQL Editor** → **New query**, ejecuta **en este orden**. Copia y pega **todo** el contenido de cada archivo y pulsa **Run**:
 
-1. Entra a [supabase.com](https://supabase.com) → tu proyecto → **SQL Editor** → **New query**.
-2. Copia **todo** el contenido de [`01_esquema.sql`](01_esquema.sql), pégalo y pulsa **Run**.
+| Paso | Archivo | Qué hace |
+|---|---|---|
+| 1 | [`01_esquema.sql`](01_esquema.sql) | Completa la tabla `product`, crea `administradores`, configura los permisos y el bucket de fotos |
+| 2 | [`02_productos.sql`](02_productos.sql) | Carga los 42 productos |
+| 3 | [`03_inventario.sql`](03_inventario.sql) | Convierte la tabla antigua `productos` en `inventario` y crea el historial de movimientos |
 
-Qué hace este script:
-- Completa la tabla `product` que ya existía. No borra datos ni columnas.
+Los tres se pueden ejecutar más de una vez sin problema.
+
+> **Importante:** ejecuta `01_esquema.sql` **completo**, incluida la parte final de *Storage*. Sin ella, el panel no puede subir fotos.
+
+### Qué hace `01_esquema.sql`
+- Completa la tabla `product` (agrega `precio`, `status`, etc. si faltan) y deja `id` como clave primaria.
 - Crea la tabla `administradores` y la función `es_admin()`.
 - Configura los permisos:
-  - Los visitantes solo ven los productos visibles y **sin** precio, costo ni stock.
-  - Solo los administradores pueden crear, editar o eliminar.
+  - Los visitantes solo ven los productos visibles y **sin** precio.
+  - Solo los administradores crean, editan o eliminan.
 - Deja público el bucket `catalogo` y permite que solo los administradores suban o borren fotos.
 
-Se puede ejecutar más de una vez sin problema.
+### Qué hace `03_inventario.sql`
+- **Reutiliza la tabla antigua `productos`**: la renombra a `inventario` y la deja con una fila por producto del catálogo (`producto_id`).
+  - Conserva `stock` y `costo`.
+  - Renombra `reorder_level` → `punto_reorden`, `unit_of_measure` → `unidad` y `artisano` → `artesana`.
+  - Quita las columnas que ya están en `product` y la fila de ejemplo.
+- Cada producto empieza con **1 pieza**. Los productos nuevos reciben su fila de inventario automáticamente.
+- Crea `inventario_movimientos`. Al registrar una **venta**, **entrada** o **ajuste**, el stock se actualiza solo y queda el historial: quién, cuándo, antes → después y una nota. No permite vender más piezas de las que hay.
+- Todo queda **privado**: solo los administradores lo ven. Esto también corrige que hoy cualquiera puede leer el costo de la tabla `productos`.
 
-### 2. Cargar los 42 productos
+### Fotos
 
-En una consulta nueva, pega y ejecuta [`02_productos.sql`](02_productos.sql).
+Las 43 fotos de `frontend/public/img/` **ya están subidas** al bucket `catalogo` con los mismos nombres. Las fotos nuevas se suben desde el panel.
 
-> El producto de ejemplo con id 1 (“corte-ejemplo”) se reemplaza por el “Traje de Patzún”.
-
-### 3. Fotos
-
-Las 43 fotos de `frontend/public/img/` **ya están subidas** al bucket `catalogo` con los mismos nombres. No hay que hacer nada.
-
-Las fotos nuevas se suben desde el panel `admin.html`.
-
-### 4. Crear el usuario administrador
+### Crear el usuario administrador
 
 1. **Authentication → Users → Add user → Create new user.**
 2. Escribe el correo y una contraseña segura, y marca **Auto Confirm User**.
@@ -56,37 +64,46 @@ Las fotos nuevas se suben desde el panel `admin.html`.
    on conflict do nothing;
    ```
 
-Repite el paso para cada persona que deba editar el catálogo.
+Repite el paso para cada persona que deba administrar.
 
-### 5. Desactivar los registros públicos (importante)
+### Registros públicos
 
-**Authentication → Sign In / Providers → desactiva “Allow new users to sign up”.**
+Ya están **desactivados**: lo comprobamos el 16/10/2026 (`disable_signup = true`). Si alguna vez hay que revisarlo: **Authentication → Sign In / Providers → “Allow new users to sign up”** debe estar apagado. Así solo existen las cuentas que ustedes crean.
 
-Así nadie puede crearse una cuenta por su cuenta. Los usuarios con sesión pueden **leer** el precio y el costo internos (los necesita el panel), así que solo deben existir las cuentas que ustedes creen.
-
-### Si `02_productos.sql` da error
+### Si algo da error
 
 | Mensaje | Qué hacer |
 |---|---|
-| `column "precio" does not exist` | Vuelve a ejecutar `01_esquema.sql` completo (agrega las columnas que falten) y luego `02_productos.sql`. |
+| `column "precio" does not exist` | Vuelve a ejecutar `01_esquema.sql` completo y luego `02_productos.sql`. |
 | `no unique or exclusion constraint matching the ON CONFLICT` | Igual: `01_esquema.sql` deja `id` como clave primaria. |
 | `relation "public.product" does not exist` | La tabla se renombró o se borró. Revisa en **Table Editor** cómo se llama ahora. |
+| `violates foreign key constraint "inventario_producto_fk"` | Hay filas de inventario de productos que no existen. Ejecuta antes `02_productos.sql`. |
+| El panel dice “El inventario aún no está activado” | Falta ejecutar `03_inventario.sql`. |
 
-### 6. Comprobar
+### Comprobar
 
 - Abre `productos.html`: deben aparecer los 42 productos.
-- Abre `admin.html` e inicia sesión con el usuario del paso 4. Prueba editar un producto y verás el cambio en la web y en la app al recargar.
+- Abre `admin.html`, inicia sesión y prueba:
+  - Editar un producto: el cambio se ve en la web y en la app al recargar.
+  - Apagar el interruptor **Visible** de un producto: desaparece de la web.
+  - En **Inventario**, registrar una **Venta**: el stock baja y aparece en “Últimos movimientos”.
 
 ---
 
 ## Cómo se usa en el día a día
 
-| Tarea | Cómo |
+Todo desde **`admin.html`**:
+
+| Tarea | Dónde |
 |---|---|
-| Agregar, editar o eliminar un producto | `admin.html` (con sesión iniciada) |
-| Ocultar un producto sin borrarlo | En `admin.html`, desmarca **Visible en el catálogo** |
-| Agregar un administrador | Pasos 4 del apartado anterior |
-| Ver o editar datos “a mano” | Supabase → **Table Editor** → `product` |
+| Agregar, editar o eliminar un producto | Pestaña **Catálogo** |
+| Ocultar un producto sin borrarlo | Interruptor **Visible** de la tarjeta |
+| Registrar una venta | **Inventario** → **Venta**. Si queda en 0, ofrece ocultarlo |
+| Registrar mercadería que llegó | **Inventario** → **Entrada** |
+| Corregir el stock después de contar | **Inventario** → **Ajustar** |
+| Ver qué se está acabando | **Inventario** → filtros **Stock bajo** / **Agotados** |
+| Llevar el inventario a Excel | **Inventario** → **Descargar Excel (CSV)** |
+| Agregar un administrador | Supabase (ver “Crear el usuario administrador”) |
 
 Los cambios se ven **al instante**, sin reconstruir Docker ni publicar una versión nueva de la app.
 
@@ -99,8 +116,9 @@ Estas copias **no** se actualizan solas. Si cambian mucho el catálogo, conviene
 
 ## Pendientes para el equipo
 
-- [ ] Ejecutar los pasos 1 a 5 de arriba.
-- [ ] Revisar para qué se creó la tabla `admin` que ya existía en el proyecto. Este esquema usa `administradores`; si `admin` ya no se necesita, se puede borrar.
-- [ ] En el ejemplo original, `categoria` y `artisano` guardaban un número (`"1"`). Ahora `categoria` guarda el nombre (`Traje`, `Huipil`…). Si quieren tablas de categorías y artesanas, se pueden agregar después.
-- [ ] Ventas, facturas y contabilidad (que estaban en el esquema de Oracle) **no** se migraron, porque el equipo decidió vender por WhatsApp. Si se necesitan en el futuro, se crean como tablas nuevas en Supabase.
-- [ ] **Apagar el servidor Oracle** (`163.192.133.68`, puerto 1521) y cambiar sus contraseñas. Ya no se usa, y sus contraseñas están en el historial de Git.
+- [ ] Ejecutar `01_esquema.sql` (completo), `02_productos.sql` y `03_inventario.sql`.
+- [ ] Crear el usuario administrador y agregar su correo a `administradores`.
+- [ ] Registrar el **stock real** y el **costo** de cada producto: Inventario → **Ajustar**, y **Editar** para el costo.
+- [ ] Revisar para qué se creó la tabla `admin`. Este esquema usa `administradores`; si `admin` ya no se necesita, se puede borrar.
+- [ ] Ventas, facturas y contabilidad del esquema de Oracle **no** se migraron: el equipo vende por WhatsApp y el historial de ventas queda en `inventario_movimientos`.
+- [ ] Si se vuelve a encender el servidor Oracle (`163.192.133.68`), cambiar antes sus contraseñas; están en el historial de Git.

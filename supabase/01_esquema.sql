@@ -170,16 +170,9 @@ create policy "catalogo_fotos_eliminar" on storage.objects
 
 
 -- ----------------------------------------------------------------------------
--- 5. Tabla antigua `productos` (copia de la `product` original, con precio y
---    costo). La web y la app NO la usan. Hoy cualquiera puede leerla, costo
---    incluido. Si nadie del equipo la necesita, quita los comentarios (--) de
---    UNA de estas opciones y ejecútala:
+-- 5. La tabla antigua `productos` (con stock y costo) se convierte en el
+--    inventario privado en 03_inventario.sql.
 -- ----------------------------------------------------------------------------
--- Opción A: dejarla, pero que el público no pueda leerla
--- revoke all on public.productos from anon;
-
--- Opción B: borrarla
--- drop table public.productos;
 
 
 -- ----------------------------------------------------------------------------
