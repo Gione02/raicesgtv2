@@ -17,7 +17,7 @@ export const SITIO = {
 
   // Dirección de la web publicada, para compartir enlaces de productos.
   // Cuando tengan dominio, cámbienlo aquí: "https://raicesgt.com"
-  servidor: "http://163.192.133.68",
+  servidor: "https://raicesgt.pages.dev",
 
   whatsapp: "50236355457",
   whatsappVisible: "+502 3635 5457",
