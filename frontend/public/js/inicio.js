@@ -1,11 +1,12 @@
 // ============================================================================
 // INICIO: muestra los últimos productos agregados al catálogo.
-// "Últimos" = los de id más alto en js/producto.js.
+// "Últimos" = los de id más alto en el catálogo (Supabase, ver js/datos.js).
 // ============================================================================
-(function () {
+(async function () {
   const CANTIDAD = 3;
   const contenedor = document.getElementById("recientes");
-  if (!contenedor || typeof productos === "undefined") return;
+  if (!contenedor) return;
+  const productos = await cargarProductos();
 
   function escaparHTML(texto) {
     return String(texto ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);

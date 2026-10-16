@@ -4,7 +4,8 @@
 // Los filtros se guardan en la URL (?departamento=Sololá&categoria=Blusa...)
 // para poder compartir un enlace con la búsqueda ya aplicada.
 // ============================================================================
-(function () {
+(async function () {
+  const productos = await cargarProductos();
   const CLAVE_VISTA = "raicesgt-vista-productos";
 
   const campoBusqueda = document.getElementById("busqueda");

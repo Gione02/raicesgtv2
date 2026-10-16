@@ -1,0 +1,155 @@
+-- ============================================================================
+-- RaícesGT — Esquema del catálogo en Supabase
+-- Ejecutar en: Supabase > SQL Editor > New query > pegar todo > Run
+--
+-- Parte de la tabla `product` que ya existe en el proyecto y la deja lista
+-- para la web, la app y el panel de administración. Se puede ejecutar más de
+-- una vez sin problema (no borra datos ni tablas existentes).
+-- ============================================================================
+
+
+-- ----------------------------------------------------------------------------
+-- 1. Columnas que usan la web y la app (se crean solo si faltan)
+-- ----------------------------------------------------------------------------
+alter table public.product add column if not exists nombre       text;
+alter table public.product add column if not exists descripcion  text;
+alter table public.product add column if not exists categoria    text;
+alter table public.product add column if not exists municipio    text;
+alter table public.product add column if not exists departamento text;
+alter table public.product add column if not exists color        text;
+alter table public.product add column if not exists imagen       text;   -- nombre del archivo en el bucket "catalogo" (ej. traje-01.jpeg)
+alter table public.product add column if not exists status       boolean default true;  -- false = oculto en la web y la app
+alter table public.product add column if not exists updated_at   timestamptz default now();
+
+-- Valores por defecto para columnas de inventario, por si alguna es NOT NULL
+-- y se agrega un producto sin llenarla
+do $$
+declare
+  col record;
+begin
+  for col in
+    select column_name, data_type
+    from information_schema.columns
+    where table_schema = 'public' and table_name = 'product'
+      and is_nullable = 'NO' and column_default is null
+      and column_name not in ('id', 'nombre')
+  loop
+    if col.data_type in ('integer', 'bigint', 'smallint', 'numeric', 'real', 'double precision') then
+      execute format('alter table public.product alter column %I set default 0', col.column_name);
+    elsif col.data_type in ('text', 'character varying') then
+      execute format('alter table public.product alter column %I set default %L', col.column_name, '');
+    elsif col.data_type = 'boolean' then
+      execute format('alter table public.product alter column %I set default true', col.column_name);
+    end if;
+  end loop;
+end $$;
+
+-- Mantiene updated_at al día
+create or replace function public.tocar_updated_at()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at = now();
+  return new;
+end $$;
+
+drop trigger if exists product_updated_at on public.product;
+create trigger product_updated_at before update on public.product
+  for each row execute function public.tocar_updated_at();
+
+
+-- ----------------------------------------------------------------------------
+-- 2. Administradores: correos que pueden editar el catálogo
+--    (los usuarios se crean en Authentication > Users; aquí se autoriza su correo)
+-- ----------------------------------------------------------------------------
+create table if not exists public.administradores (
+  email      text primary key,
+  creado_en  timestamptz default now()
+);
+alter table public.administradores enable row level security;
+revoke all on public.administradores from anon, authenticated;
+
+create or replace function public.es_admin()
+returns boolean
+language sql stable security definer set search_path = public
+as $$
+  select exists (
+    select 1 from public.administradores
+    where lower(email) = lower(coalesce(auth.jwt() ->> 'email', ''))
+  );
+$$;
+grant execute on function public.es_admin() to anon, authenticated;
+
+
+-- ----------------------------------------------------------------------------
+-- 3. Permisos de la tabla product
+--    - Visitantes (anon): solo leen productos visibles y SIN precio, costo ni stock.
+--    - Administradores: leen todo y pueden crear, editar y eliminar.
+-- ----------------------------------------------------------------------------
+alter table public.product enable row level security;
+
+-- Columnas que puede ver el público (el precio no se muestra por decisión del equipo)
+revoke select on public.product from anon;
+grant select (id, nombre, descripcion, categoria, municipio, departamento, color, imagen, status, created_at)
+  on public.product to anon;
+
+-- Los usuarios con sesión necesitan todas las columnas para el panel
+grant select, insert, update, delete on public.product to authenticated;
+
+-- Quita políticas anteriores con estos nombres para poder re-ejecutar el script
+drop policy if exists "catalogo_lectura_publica" on public.product;
+drop policy if exists "catalogo_admin_lectura"   on public.product;
+drop policy if exists "catalogo_admin_insertar"  on public.product;
+drop policy if exists "catalogo_admin_editar"    on public.product;
+drop policy if exists "catalogo_admin_eliminar"  on public.product;
+
+create policy "catalogo_lectura_publica" on public.product
+  for select to anon
+  using (status is true);
+
+create policy "catalogo_admin_lectura" on public.product
+  for select to authenticated
+  using (status is true or public.es_admin());
+
+create policy "catalogo_admin_insertar" on public.product
+  for insert to authenticated
+  with check (public.es_admin());
+
+create policy "catalogo_admin_editar" on public.product
+  for update to authenticated
+  using (public.es_admin()) with check (public.es_admin());
+
+create policy "catalogo_admin_eliminar" on public.product
+  for delete to authenticated
+  using (public.es_admin());
+
+
+-- ----------------------------------------------------------------------------
+-- 4. Fotos: bucket público "catalogo"
+--    Cualquiera puede ver las fotos; solo administradores suben o borran.
+-- ----------------------------------------------------------------------------
+insert into storage.buckets (id, name, public)
+values ('catalogo', 'catalogo', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "catalogo_fotos_subir"    on storage.objects;
+drop policy if exists "catalogo_fotos_editar"   on storage.objects;
+drop policy if exists "catalogo_fotos_eliminar" on storage.objects;
+
+create policy "catalogo_fotos_subir" on storage.objects
+  for insert to authenticated
+  with check (bucket_id = 'catalogo' and public.es_admin());
+
+create policy "catalogo_fotos_editar" on storage.objects
+  for update to authenticated
+  using (bucket_id = 'catalogo' and public.es_admin());
+
+create policy "catalogo_fotos_eliminar" on storage.objects
+  for delete to authenticated
+  using (bucket_id = 'catalogo' and public.es_admin());
+
+
+-- ----------------------------------------------------------------------------
+-- 5. Agrega aquí el correo de cada administrador (cámbialo por el real)
+-- ----------------------------------------------------------------------------
+-- insert into public.administradores (email) values ('correo-del-admin@ejemplo.com')
+-- on conflict do nothing;

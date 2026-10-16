@@ -3,7 +3,8 @@
 // Muestra un producto, permite consultarlo o compartir su enlace y sugiere
 // productos relacionados (mismo departamento o categoría).
 // ============================================================================
-(function () {
+(async function () {
+  const productos = await cargarProductos();
   const detalle = document.getElementById("detalle");
   const id = Number(new URLSearchParams(location.search).get("id"));
   const producto = productos.find((p) => p.id === id);

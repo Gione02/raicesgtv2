@@ -5,6 +5,15 @@
 const SITIO = {
   nombre: "RaícesGT",
 
+  // Base de datos del catálogo. La clave "publishable" es pública por diseño:
+  // solo permite lo que autorizan los permisos (RLS) de supabase/01_esquema.sql.
+  // NUNCA pongas aquí la clave "secret" ni la contraseña de la base de datos.
+  supabase: {
+    url: "https://epfyswdzqwkryvyuqycd.supabase.co",
+    clave: "sb_publishable_DVkwGB-RdBWQwWBbBD8SLg_SKnUHEUX",
+    bucketFotos: "catalogo",
+  },
+
   // Número de WhatsApp con código de país (502 = Guatemala), sin espacios ni "+"
   whatsapp: "50236355457",
   whatsappVisible: "+502 3635 5457",

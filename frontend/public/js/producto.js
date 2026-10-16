@@ -1,11 +1,8 @@
 // ============================================================================
-// CATÁLOGO DE PRODUCTOS
-// Para agregar un producto puedes usar el editor en admin.html, o copiar un
-// bloque { ... } y cambiar sus datos. Reglas:
-//  - "id" debe ser único.
-//  - "categoria": Traje, Traje de gala, Huipil, Blusa o Corte.
-//  - "departamento": escrito con tildes (Sololá, Quiché, Totonicapán...).
-//  - "imagen": archivo dentro de img/, sin espacios. Ej.: "./img/traje-40.jpeg"
+// COPIA DE RESPALDO DEL CATÁLOGO
+// El catálogo oficial está en Supabase (tabla `product`) y se edita desde
+// admin.html. Esta lista solo se usa si Supabase no responde, y sirve para
+// generar la carga inicial: node supabase/generar-productos-sql.js
 // ============================================================================
 const productos = [
     {

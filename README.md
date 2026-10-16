@@ -1,8 +1,20 @@
 # RaícesGT — Artesanías y Textiles Mayas, S.A.
 
-Sitio web de catálogo de textiles guatemaltecos: trajes típicos, huipiles, blusas y cortes. Los clientes navegan la colección, filtran por departamento, categoría o color, y consultan precio y disponibilidad por WhatsApp.
+Sitio web y app Android de catálogo de textiles guatemaltecos: trajes típicos, huipiles, blusas y cortes. Los clientes navegan la colección, filtran por departamento, categoría o color, y consultan precio y disponibilidad por WhatsApp.
 
-> **Estado actual:** el sitio funciona como **catálogo con consultas por WhatsApp**. Todavía **no** está conectado a la base de datos ni publicado en internet. Más abajo está todo lo que falta para dejarlo al 100 %.
+**Arquitectura:**
+
+```
+  Web (frontend/) ──┐
+                    ├──>  Supabase  (tabla product + fotos en Storage + login de administradores)
+  App (mobile/)  ───┘
+```
+
+- No hay servidor de API propio: la web y la app leen directo de **Supabase**.
+- Los productos se administran desde `admin.html`.
+- Guía de Supabase: [`supabase/README.md`](supabase/README.md).
+
+> **Estado actual:** la web y la app ya leen de Supabase. Falta que el equipo ejecute la configuración inicial ([`supabase/README.md`](supabase/README.md)) y publicar el sitio con dominio. Más abajo está todo lo que falta para dejarlo al 100 %.
 
 ---
 
@@ -74,23 +86,22 @@ npx expo start
 
 Escanea el código QR con Expo Go. Más detalles en [`mobile/README.md`](mobile/README.md).
 
-### Variables de entorno (backend y base de datos)
+### Base de datos (Supabase)
 
-El backend y Oracle usan un archivo `.env` con contraseñas que **no** debe subirse a GitHub. Copia la plantilla y pide los valores al responsable del proyecto:
+La web y la app **no necesitan** un archivo `.env`: la dirección de Supabase y la clave *publishable* (pública por diseño) están en `frontend/public/js/config.js` y `mobile/src/config.js`.
 
-```bash
-cp .env.example .env
-```
+La configuración inicial de las tablas, los permisos y el usuario administrador está en [`supabase/README.md`](supabase/README.md).
+
+> La clave **secret** de Supabase nunca va en el código ni en GitHub.
 
 ---
 
 ## 2. Estructura del proyecto
 
 ```
-├── docker-compose.yml        # Servicios de Docker (hoy solo nginx con el frontend)
-├── .env.example              # Plantilla de variables de entorno (sin contraseñas)
-├── backend/                  # API (el código completo está en la rama "frontend")
-├── oracle/                   # Base de datos Oracle
+├── docker-compose.yml        # Sirve la web con nginx
+├── .env.example              # Referencia de los datos de conexión (sin claves secretas)
+├── supabase/                 # SQL de tablas y permisos + carga inicial — ver supabase/README.md
 ├── mobile/                   # App Android (React Native + Expo) — ver mobile/README.md
 └── frontend/
     ├── Dockerfile            # Compila Tailwind y sirve el sitio con nginx
@@ -105,11 +116,13 @@ cp .env.example .env
         ├── privacidad.html   # Política de privacidad (texto base)
         ├── terminos.html     # Términos de servicio (texto base)
         ├── sostenibilidad.html
-        ├── admin.html        # Editor del catálogo (ver "Agregar un producto")
-        ├── img/              # Fotos de productos y favicon
+        ├── admin.html        # Panel para administrar el catálogo (con inicio de sesión)
+        ├── img/              # Copia local de las fotos y favicon
         └── js/
-            ├── config.js     # WhatsApp y redes sociales ← se edita aquí
-            ├── producto.js   # CATÁLOGO: lista de todos los productos
+            ├── config.js     # Supabase, WhatsApp y redes sociales ← se edita aquí
+            ├── datos.js      # Lee los productos de Supabase
+            ├── producto.js   # Copia de respaldo del catálogo (si Supabase no responde)
+            ├── vendor/       # Librería supabase-js (para el panel)
             ├── layout.js     # Cabecera, pie de página y botón flotante de WhatsApp
             ├── catalogo.js   # Lógica de productos.html
             ├── detalle.js    # Lógica de producto.html
@@ -123,24 +136,22 @@ cp .env.example .env
 
 ### Agregar o editar un producto
 
-**Con el editor (más fácil):**
+1. Abre `admin.html` en el sitio publicado o en `http://localhost/admin.html`.
+2. Inicia sesión con tu cuenta de administrador. Las cuentas se crean en Supabase; ver [`supabase/README.md`](supabase/README.md).
+3. Pulsa **+ Nuevo producto** o **Editar**, llena los datos, elige la foto y pulsa **Guardar**.
 
-1. Abre `http://localhost/admin.html`.
-2. Pulsa **+ Nuevo producto**, llena los datos y elige la foto.
-3. Pulsa **Descargar producto.js**.
-4. Reemplaza `frontend/public/js/producto.js` por el archivo descargado.
-5. Copia la foto a `frontend/public/img/` **con el nombre exacto** que muestra el editor.
-6. Ejecuta `docker compose up -d --build`.
+El cambio aparece **al instante** en la web y en la app, sin reconstruir Docker. Los productos con id más alto aparecen como “recién agregados” en el inicio.
 
-**A mano:** copia un bloque `{ ... }` en `frontend/public/js/producto.js` y cambia los datos. Reglas:
+Para ocultar un producto sin borrarlo, desmarca **Visible en el catálogo**.
+
+Reglas para los datos:
 
 | Campo | Regla | Ejemplo |
 |---|---|---|
-| `id` | Número único. Los más altos aparecen como “recién agregados” en el inicio. | `43` |
-| `categoria` | Una de: `Traje`, `Traje de gala`, `Huipil`, `Blusa`, `Corte` | `"Huipil"` |
-| `departamento` | Con tildes, tal como se escribe oficialmente | `"Sololá"` |
-| `imagen` | Archivo dentro de `img/`, **sin espacios** | `"./img/traje-40.jpeg"` |
-| `descripcion` | Que no repita el nombre: origen, técnica, colores, ocasión | — |
+| Categoría | Una de: `Traje`, `Traje de gala`, `Huipil`, `Blusa`, `Corte` | `Huipil` |
+| Departamento | Se elige de la lista (con tildes) | `Sololá` |
+| Descripción | Que no repita el nombre: origen, técnica, colores, ocasión | — |
+| Precio | Interno: **no** se muestra al público | `3500` |
 
 ### Cambiar el número de WhatsApp o las redes sociales
 
@@ -164,12 +175,14 @@ Edita `frontend/tailwind.config.js` (sección `colors`) y reconstruye.
 - [x] “Agregados recientemente” del inicio se genera solo con los últimos productos
 - [x] Descripciones nuevas para los 42 productos y datos normalizados (tildes, categorías, nombres)
 - [x] Páginas de Contacto, Privacidad, Términos y Sostenibilidad
-- [x] Editor del catálogo (`admin.html`)
+- [x] Catálogo en **Supabase**: la web y la app leen la misma base de datos
+- [x] Panel `admin.html` con inicio de sesión: crear, editar, ocultar y eliminar productos, y subir fotos
+- [x] El precio y el costo no se publican (permisos por columna en Supabase)
+- [x] Se retiraron Oracle y el API en FastAPI (el código sigue en la rama `frontend` del repositorio original)
 - [x] Íconos que mostraban texto (“search”, “arrow_forward”) reemplazados por SVG
 - [x] Imágenes renombradas sin espacios (`traje-01.jpeg`…)
 - [x] Tailwind compilado en el build en lugar del CDN de desarrollo
 - [x] Favicon
-- [x] La web genera `data/productos.json` al construirse, para que la app use el mismo catálogo
 - [x] App Android inicial (React Native + Expo): Inicio, Colección con filtros y vista columnas/lista, detalle, contacto
 
 ---
@@ -180,17 +193,20 @@ Ordenado por prioridad. Los marcados con 🔴 deben resolverse antes de publicar
 
 ### 🔴 Seguridad
 
-- [ ] **Cambiar las contraseñas de la base de datos.** El archivo `.env` con contraseñas reales quedó guardado en el historial de Git del repositorio original. Aunque se quite ahora, sigue visible en commits anteriores; hay que considerarlas expuestas y cambiarlas.
-- [ ] **Dejar de versionar `.env`** (`git rm --cached .env`). Ya existe `.env.example` como plantilla.
-- [ ] **Login real en `admin.html`** antes de publicarlo. Hoy no tiene contraseña porque no guarda nada en el servidor; cuando se conecte al API, debe exigir inicio de sesión.
+- [ ] **Apagar el servidor Oracle** (`163.192.133.68`, puerto 1521, abierto a internet) y **cambiar sus contraseñas**. Ya no se usa, y el `.env` con esas contraseñas quedó en el historial de Git. Desde ahora `.env` ya no se versiona.
+- [ ] **Desactivar los registros públicos en Supabase** (Authentication → “Allow new users to sign up”). Ver [`supabase/README.md`](supabase/README.md), paso 5.
+- [x] Login real en `admin.html` (Supabase Auth + lista de administradores).
 
-### 🔴 Backend y base de datos
+### 🔴 Configuración de Supabase (una sola vez)
 
-- [ ] **Unir el backend al proyecto principal.** El API (FastAPI) y el esquema de Oracle (`db.sql`) están en la rama `frontend` del repositorio original, no en `main`. En `main`, `docker-compose.yml` solo levanta nginx.
-- [ ] **Corregir `backend/requirements.txt`**: instala `pymongo` (MongoDB), pero el proyecto usa Oracle (`oracledb`).
-- [ ] **Ampliar la tabla `products`**: hoy no tiene los campos que usa la página: `municipio`, `departamento`, `color`, `imagen`, `descripcion`.
-- [ ] **Conectar el catálogo al API** (`GET /products`) en lugar de `js/producto.js`. Así los productos se manejan desde el panel sin tocar código ni reconstruir Docker.
-- [ ] **Guardar desde `admin.html` directo en la base de datos**, incluyendo la subida de fotos.
+Pasos detallados en [`supabase/README.md`](supabase/README.md):
+
+- [ ] Ejecutar `supabase/01_esquema.sql` (tablas y permisos).
+- [ ] Ejecutar `supabase/02_productos.sql` (los 42 productos).
+- [ ] Crear el usuario administrador y agregar su correo a `administradores`.
+- [x] Fotos en el bucket `catalogo` (ya estaban las 43).
+
+Hasta que se ejecute `02_productos.sql`, la web y la app muestran solo el producto de ejemplo que hay hoy en Supabase.
 
 ### ✅ Decisiones del equipo (octubre 2026)
 
@@ -211,7 +227,7 @@ Estos puntos se evaluaron y **no se van a implementar**:
 
 - [ ] Página **“Sobre nosotros”**: quiénes son y con qué artesanas o comunidades trabajan.
 - [ ] Cuenta de **TikTok** (opcional). Se agrega en `config.js`.
-- [ ] **App Android** (`mobile/`): versión inicial lista con React Native + Expo (Inicio, Colección con filtros, detalle y contacto). Pendientes en [`mobile/README.md`](mobile/README.md): HTTPS, conectar al API, pruebas en varios celulares y publicación en Google Play.
+- [ ] **App Android** (`mobile/`): versión inicial lista con React Native + Expo (Inicio, Colección con filtros, detalle y contacto). Ya lee de Supabase. Pendientes en [`mobile/README.md`](mobile/README.md): pruebas en varios celulares y publicación en Google Play.
 - [ ] Estadísticas de visitas (Google Analytics o similar).
 
 ---
@@ -220,7 +236,7 @@ Estos puntos se evaluaron y **no se van a implementar**:
 
 Estos textos y datos se escribieron o corrigieron con la información disponible. **Alguien que conozca los productos debe confirmarlos.**
 
-- [ ] **Descripciones de los 42 productos** (`js/producto.js`): confirmar que la información de cada pieza sea correcta.
+- [ ] **Descripciones de los 42 productos** (se editan en `admin.html`): confirmar que la información de cada pieza sea correcta.
 - [ ] **“San Lucas” (productos #8 y #12)**: están en el departamento *Guatemala*. ¿Es San Lucas Sacatepéquez, San Lucas Tolimán u otro?
 - [ ] **“Sacatepéquez” (#26)** y **“San Pedro” (#36)**: el municipio está incompleto.
 - [ ] **Precios que parecen inconsistentes** (no se muestran en el sitio, pero se usan al responder consultas):
@@ -238,13 +254,13 @@ Estos textos y datos se escribieron o corrigieron con la información disponible
 
 ## 7. Pasos para publicarlo en internet
 
-Hoy el sitio solo corre en la computadora de quien ejecuta Docker (`http://localhost`). Para que el público lo vea:
+Hoy el sitio corre en `http://localhost` o en el servidor de prueba del equipo, sin dominio ni HTTPS. Para que el público lo vea:
 
-1. **Resolver los puntos 🔴** de la sección 5 (contraseñas, `.env`, login del panel).
+1. **Resolver los puntos 🔴** de la sección 5 (servidor Oracle y configuración de Supabase).
 2. **Comprar un dominio**, por ejemplo `raicesgt.com` o `raicesgt.com.gt`.
 3. **Elegir dónde alojarlo:**
-   - *Solo catálogo (sin backend):* hosting estático gratuito o barato (Netlify, Vercel, Cloudflare Pages, GitHub Pages). Comando de build: `npm run build:css` dentro de `frontend/`; carpeta a publicar: `frontend/public`.
-   - *Con backend y base de datos:* un servidor VPS (DigitalOcean, Linode, AWS Lightsail, etc.) que ejecute `docker compose up -d --build`.
+   - *Recomendado:* hosting estático gratuito (Netlify, Vercel, Cloudflare Pages o GitHub Pages). La base de datos ya está en Supabase, así que no hace falta un servidor propio. Comando de build: `npm install && npm run build:css` dentro de `frontend/`; carpeta a publicar: `frontend/public`.
+   - *Alternativa:* un servidor VPS que ejecute `docker compose up -d --build`.
 4. **Apuntar el dominio** al hosting, con registros DNS en el proveedor del dominio.
 5. **Activar HTTPS** (el candado). Los hostings estáticos lo hacen solos; en un VPS se configura gratis con Let’s Encrypt.
 6. **Probar en celular y computadora**: catálogo, filtros, página de producto, botones de WhatsApp y enlaces del pie de página.

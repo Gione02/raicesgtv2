@@ -7,9 +7,16 @@ import { Linking } from "react-native";
 export const SITIO = {
   nombre: "RaícesGT",
 
-  // Servidor donde está publicada la web. De ahí se leen el catálogo
-  // (data/productos.json) y las fotos (img/...).
-  // Cuando tengan dominio con HTTPS, cámbienlo aquí: "https://raicesgt.com"
+  // Base de datos del catálogo (misma que la web). La clave "publishable" es
+  // pública por diseño; NUNCA pongas aquí la clave "secret".
+  supabase: {
+    url: "https://epfyswdzqwkryvyuqycd.supabase.co",
+    clave: "sb_publishable_DVkwGB-RdBWQwWBbBD8SLg_SKnUHEUX",
+    bucketFotos: "catalogo",
+  },
+
+  // Dirección de la web publicada, para compartir enlaces de productos.
+  // Cuando tengan dominio, cámbienlo aquí: "https://raicesgt.com"
   servidor: "http://163.192.133.68",
 
   whatsapp: "50236355457",
@@ -22,9 +29,14 @@ export const SITIO = {
   },
 };
 
-// Dirección completa de una foto del catálogo ("img/traje-01.jpeg")
+// Dirección completa de una foto. Acepta una dirección completa o el nombre del
+// archivo en el bucket de Supabase ("traje-01.jpeg" o "img/traje-01.jpeg")
 export function urlImagen(imagen) {
-  return encodeURI(`${SITIO.servidor}/${String(imagen).replace(/^\.?\//, "")}`);
+  const valor = String(imagen || "").trim();
+  if (/^https?:\/\//.test(valor)) return valor;
+  const archivo = valor.split("/").pop();
+  const { url, bucketFotos } = SITIO.supabase;
+  return `${url}/storage/v1/object/public/${bucketFotos}/${encodeURIComponent(archivo)}`;
 }
 
 // Dirección de la página web de un producto, para compartir

@@ -6,7 +6,7 @@
     "build:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --minify",
     "watch:css": "tailwindcss -i ./src/input.css -o ./public/css/styles.css --watch",
     "build:datos": "node scripts/exportar-catalogo.js",
-    "build": "npm run build:css && npm run build:datos"
+    "build": "npm run build:css"
   },
   "devDependencies": {
     "@tailwindcss/container-queries": "0.1.1",

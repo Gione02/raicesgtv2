@@ -2,22 +2,36 @@
 // CATÁLOGO COMPARTIDO POR TODAS LAS PANTALLAS
 // 1. Arranca con la copia incluida en la app (src/datos/productos.json),
 //    así funciona aunque no haya internet.
-// 2. Luego descarga la versión del servidor (data/productos.json) y la usa
-//    si está disponible.
-// Cuando el API tenga los productos, solo hay que cambiar URL_CATALOGO.
+// 2. Luego descarga los productos de Supabase (tabla `product`), la misma
+//    base de datos que usa la web y que se edita desde admin.html.
 // ============================================================================
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { SITIO } from "../config";
 import copiaLocal from "./productos.json";
 
-const URL_CATALOGO = `${SITIO.servidor}/data/productos.json`;
+// Columnas públicas (el precio y el costo no se publican)
+const COLUMNAS = "id,nombre,descripcion,categoria,municipio,departamento,color,imagen";
+const URL_CATALOGO = `${SITIO.supabase.url}/rest/v1/product?select=${COLUMNAS}&status=is.true&order=id`;
 const TIEMPO_LIMITE_MS = 8000;
 
 const CatalogoContext = createContext(null);
 
+function normalizar(p) {
+  return {
+    id: Number(p.id),
+    nombre: p.nombre || "",
+    descripcion: p.descripcion || "",
+    categoria: p.categoria || "",
+    municipio: p.municipio || "",
+    departamento: p.departamento || "",
+    color: p.color || "",
+    imagen: p.imagen || "",
+  };
+}
+
 export function CatalogoProvider({ children }) {
-  const [productos, setProductos] = useState(copiaLocal.productos);
+  const [productos, setProductos] = useState(() => copiaLocal.productos.map(normalizar));
   const [origen, setOrigen] = useState("local"); // "local" | "servidor"
   const [actualizando, setActualizando] = useState(false);
 
@@ -26,15 +40,18 @@ export function CatalogoProvider({ children }) {
     const control = new AbortController();
     const temporizador = setTimeout(() => control.abort(), TIEMPO_LIMITE_MS);
     try {
-      const respuesta = await fetch(URL_CATALOGO, { signal: control.signal, cache: "no-store" });
+      const respuesta = await fetch(URL_CATALOGO, {
+        headers: { apikey: SITIO.supabase.clave },
+        signal: control.signal,
+      });
       if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-      const datos = await respuesta.json();
-      if (Array.isArray(datos.productos) && datos.productos.length > 0) {
-        setProductos(datos.productos);
+      const filas = await respuesta.json();
+      if (Array.isArray(filas) && filas.length > 0) {
+        setProductos(filas.map(normalizar));
         setOrigen("servidor");
       }
     } catch (e) {
-      // Sin conexión o el servidor aún no publica el JSON: se queda con la copia local
+      // Sin conexión o Supabase no responde: se queda con la copia local
     } finally {
       clearTimeout(temporizador);
       setActualizando(false);

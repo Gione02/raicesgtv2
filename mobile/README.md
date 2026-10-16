@@ -26,19 +26,17 @@ Cada vez que guardes un archivo, la app se actualiza sola en el celular.
 
 ## De dónde salen los productos
 
-La app **no tiene un catálogo propio**: usa el mismo de la web (`frontend/public/js/producto.js`).
+La app usa la **misma base de datos que la web: Supabase** (tabla `product`). Los productos se editan desde el panel `admin.html` de la web y la app los ve al abrirse o al deslizar hacia abajo en Colección.
 
 1. Al abrir, muestra la **copia incluida** en `src/datos/productos.json`, así funciona aunque no haya internet.
-2. Luego descarga la versión del servidor: `http://<servidor>/data/productos.json`. Ese archivo lo genera Docker al construir la web.
-3. Las fotos se cargan desde `http://<servidor>/img/...`.
+2. Luego descarga los productos visibles de Supabase. El precio y el costo no se descargan.
+3. Las fotos se cargan del bucket público `catalogo` de Supabase (HTTPS).
 
-Para actualizar la copia incluida después de cambiar `producto.js`:
+Para actualizar la copia incluida, que se genera desde la copia de respaldo de la web, `frontend/public/js/producto.js`:
 
 ```bash
 npm run sync:catalogo
 ```
-
-Cuando el API tenga los productos, solo hay que cambiar `URL_CATALOGO` en `src/datos/CatalogoContext.js`.
 
 ## Configuración
 
@@ -46,7 +44,8 @@ Todo está en **`src/config.js`**:
 
 | Dato | Para qué sirve |
 |---|---|
-| `servidor` | Dirección de la web publicada (catálogo y fotos). Hoy: `http://163.192.133.68` |
+| `supabase` | Dirección del proyecto y clave *publishable* (pública por diseño) |
+| `servidor` | Dirección de la web, para los enlaces de “Compartir” |
 | `whatsapp` | Número con código de país, sin espacios |
 | `redes` | Facebook, Instagram, TikTok (las vacías no se muestran) |
 
@@ -67,9 +66,9 @@ mobile/
     │   │   └── contacto.js  # WhatsApp, redes y preguntas frecuentes
     │   └── producto/[id].js # Detalle de un producto
     ├── components/          # Tarjeta de producto, cabecera, selector de filtros...
-    ├── datos/               # Catálogo (copia local + descarga del servidor)
+    ├── datos/               # Catálogo (copia local + descarga de Supabase)
     ├── utils/               # Búsqueda sin tildes, colores, etc.
-    ├── config.js            # Servidor, WhatsApp y redes
+    ├── config.js            # Supabase, WhatsApp y redes
     └── tema.js              # Colores
 ```
 
@@ -97,8 +96,6 @@ Publicar en Google Play requiere una **cuenta de desarrollador**, con un pago ú
 
 ## Pendientes de la app
 
-- [ ] **HTTPS:** la app permite tráfico `http://` (`usesCleartextTraffic` en `app.json`) porque el servidor aún no tiene certificado. Cuando haya dominio con HTTPS, cambiar `servidor` en `src/config.js` y quitar ese permiso.
-- [ ] **Publicar `data/productos.json` en el servidor:** reconstruir la web con el `Dockerfile` actualizado. Mientras tanto, la app usa la copia incluida.
-- [ ] Conectar al API cuando la base de datos tenga los productos.
+- [ ] Cuando la web tenga dominio, cambiar `servidor` en `src/config.js` para que los enlaces de “Compartir” apunten ahí.
 - [ ] Probar en varios celulares Android, con pantallas pequeñas y grandes.
 - [ ] Crear la cuenta de Google Play y preparar la ficha de la tienda: capturas, descripción y política de privacidad (se puede usar `privacidad.html` de la web).
