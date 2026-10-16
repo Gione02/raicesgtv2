@@ -47,7 +47,8 @@ for (const archivo of fs.readdirSync(publico).filter((f) => f.endsWith(".html"))
     .replace(/\s+/g, " ")
     .trim();
 
-  const urlPagina = dominio ? `${dominio}/${archivo === "index.html" ? "" : archivo}` : "";
+  // Cloudflare Pages sirve las páginas sin ".html" (/productos en vez de /productos.html)
+  const urlPagina = dominio ? `${dominio}/${archivo === "index.html" ? "" : archivo.replace(/\.html$/, "")}` : "";
   const etiquetas = [
     INICIO,
     `<meta property="og:type" content="website" />`,

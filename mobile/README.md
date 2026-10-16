@@ -48,7 +48,7 @@ Todo está en **`src/config.js`**:
 | Dato | Para qué sirve |
 |---|---|
 | `supabase` | Dirección del proyecto y clave *publishable* (pública por diseño) |
-| `servidor` | Dirección de la web, para los enlaces de “Compartir” (cámbiala cuando tengan dominio; ver `PUBLICAR.md`) |
+| `servidor` | Dirección de la web publicada (`https://raicesgt.pages.dev`), para los enlaces de “Compartir” |
 | `whatsapp` | Número con código de país, sin espacios |
 | `redes` | Facebook, Instagram, TikTok (las vacías no se muestran) |
 
@@ -99,6 +99,6 @@ Guía completa: [`PUBLICAR.md`](../PUBLICAR.md), sección 4.
 
 ## Pendientes de la app
 
-- [ ] Cuando la web esté publicada en Cloudflare Pages, cambiar `servidor` en `src/config.js` (ej. `https://raicesgt.pages.dev`) para que los enlaces de “Compartir” apunten ahí.
+- [x] `servidor` en `src/config.js` apunta a la web publicada (`https://raicesgt.pages.dev`).
 - [ ] Generar el APK e instalarlo en los celulares del equipo.
 - [ ] Probar en varios celulares Android, con pantallas pequeñas y grandes.

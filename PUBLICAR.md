@@ -25,91 +25,51 @@ Cómo poner la web en internet **gratis** con HTTPS, cómo activar la vista prev
 
 ---
 
-## 2. Publicar la web en Cloudflare Pages (gratis, con HTTPS)
+## 2. La web publicada: `https://raicesgt.pages.dev`
 
-1. Crea una cuenta gratis en [dash.cloudflare.com](https://dash.cloudflare.com).
-2. **Workers & Pages → Create → Pages → Connect to Git** y autoriza GitHub. Elige el repositorio **raicesgtv2**.
-3. **Nombre del proyecto:** `raicesgt`. Será la dirección `https://raicesgt.pages.dev`; el 16/10/2026 estaba libre.
-4. Configuración de build:
+✅ **Publicada el 16/10/2026** en Cloudflare Pages, gratis y con HTTPS. La cuenta de Cloudflare es la de `brayancubur@gmail.com` y el proyecto se llama `raicesgt`.
 
-   | Campo | Valor |
-   |---|---|
-   | Production branch | `main` |
-   | Framework preset | None |
-   | Build command | `cd frontend && npm ci && npm run build` |
-   | Build output directory | `frontend/public` |
+- Las páginas se sirven **sin `.html`**: `/productos`, `/producto?id=27`, `/nosotros`… Los enlaces antiguos con `.html` redirigen solos.
+- El panel está en `https://raicesgt.pages.dev/admin`.
+- El catálogo se lee de Supabase, así que los cambios hechos en el panel **no** requieren volver a publicar.
 
-5. **Save and Deploy**. En 1–2 minutos la web queda en `https://raicesgt.pages.dev`, **con HTTPS automático**.
+### Cómo actualizar la web
 
-Desde entonces, **cada vez que suban cambios a `main` en GitHub, Cloudflare publica la nueva versión sola**.
-
-> Docker ya no es necesario para publicar. Sigue en el proyecto, como opción, para verla en la computadora o montarla en un servidor propio.
-
-### Después de publicar, actualizar la dirección en la app
-
-En `mobile/src/config.js` cambien:
-
-```js
-servidor: "https://raicesgt.pages.dev",
-```
-
-Así, el botón **Compartir** de la app envía enlaces a la web publicada.
-
-### (Opcional) Dominio propio
-
-Si algún día quieren uno, `raicesgt.com` ya está ocupado. Opciones libres al 16/10/2026: `raicesdeguatemala.com`, `tiendaraicesgt.com` y `textilesraicesgt.com`. Se compra en Cloudflare Registrar, se agrega en **Custom domains** del proyecto, y Cloudflare configura los DNS y el HTTPS solo. Luego hay que repetir los pasos de Open Graph con la nueva dirección.
-
----
-
-## 3. Open Graph: vista previa al compartir, paso a paso
-
-**Qué es:** cuando alguien pega el enlace de la web en WhatsApp, Facebook o Instagram, en lugar de un enlace suelto aparece una **tarjeta con imagen, título y descripción**.
-
-**Lo que ya está hecho:**
-- Todas las páginas públicas tienen las etiquetas `og:*`.
-- La imagen [`frontend/public/img/compartir.jpg`](frontend/public/img/compartir.jpg) (1200×630) ya existe.
-- El script `npm run build:og` genera las etiquetas a partir de `frontend/sitio.json`.
-- Cloudflare ejecuta ese script en cada publicación, porque está dentro de `npm run build`.
-
-**Lo que falta: decirle al sitio cuál es su dirección.** WhatsApp y Facebook necesitan direcciones completas (`https://…`).
-
-### Paso 1. Publicar la web
-Sigue la sección 2 hasta tener `https://raicesgt.pages.dev` funcionando.
-
-### Paso 2. Poner la dirección en `frontend/sitio.json`
-Abre el archivo y llena `"url"`:
-
-```json
-{
-  "nombre": "RaícesGT",
-  "url": "https://raicesgt.pages.dev",
-  ...
-}
-```
-
-Con la dirección puesta, la imagen se sirve desde la propia web. **Ya no hace falta subirla a Supabase.**
-
-### Paso 3. Generar las etiquetas y subir el cambio
-En la terminal:
+Solo hace falta cuando se cambia el **código o el diseño**: HTML, CSS, JS o imágenes de `frontend/`.
 
 ```bash
 cd frontend
-npm run build:og
-cd ..
-git add frontend
-git commit -m "Open Graph con la dirección publicada"
-git push v2 mejoras-catalogo-y-diseno:main
+npm run publicar
 ```
 
-`npm run build:og` actualiza las 8 páginas: agrega `og:url`, el enlace canónico y la imagen con la dirección completa. Cloudflare publica el cambio en 1–2 minutos.
+Esto compila el CSS, regenera Open Graph y sube los archivos a Cloudflare en 1–2 minutos. Después, sube también el código a GitHub (`git push`).
 
-### Paso 4. Probar
-1. Abre [opengraph.xyz](https://www.opengraph.xyz) o el [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) y pega `https://raicesgt.pages.dev`. Debe aparecer la tarjeta con la imagen.
-2. En **WhatsApp**, envíate el enlace en un chat. WhatsApp guarda las vistas previas un tiempo: si probaste antes del cambio, agrega `?v=2` al final del enlace.
-3. Prueba también `https://raicesgt.pages.dev/productos.html` y `/nosotros.html`. Cada una muestra su propio título y descripción.
+- La primera vez en otra computadora, pedirá iniciar sesión en Cloudflare: `npx wrangler@4.147.0 login`. Se abre el navegador; pulsa **Allow**.
+- El proyecto se publica desde la computadora con Wrangler (*Direct Upload*). Por eso **no** se publica solo con cada `git push`; hay que ejecutar `npm run publicar`.
+
+### (Opcional) Dominio propio
+
+`raicesgt.com` ya está ocupado. Opciones libres al 16/10/2026: `raicesdeguatemala.com`, `tiendaraicesgt.com` y `textilesraicesgt.com` (~USD 10–15 al año). Para usarlo:
+1. Cloudflare → **Workers & Pages → raicesgt → Custom domains** → agregar el dominio.
+2. Cambiar `"url"` en `frontend/sitio.json` y `servidor` en `mobile/src/config.js`.
+3. `npm run publicar`.
+
+---
+
+## 3. Open Graph: vista previa al compartir
+
+✅ **Activo.** Todas las páginas públicas tienen las etiquetas `og:*` con la dirección publicada y la imagen `https://raicesgt.pages.dev/img/compartir.jpg` (1200×630). Al pegar un enlace en WhatsApp, Facebook o Instagram aparece una tarjeta con imagen, título y descripción.
+
+**Cómo funciona:** `frontend/sitio.json` guarda la dirección (`"url": "https://raicesgt.pages.dev"`). `npm run build:og`, que también corre dentro de `npm run publicar`, escribe las etiquetas en cada página usando su `<title>` y su descripción. Si cambian un título o una descripción, solo vuelvan a publicar.
+
+### Probar la vista previa
+1. Abre [opengraph.xyz](https://www.opengraph.xyz) y pega `https://raicesgt.pages.dev`. Debe aparecer la tarjeta con la imagen.
+2. También sirve el [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), que pide iniciar sesión en Facebook. Pulsa **Scrape Again** si cambiaron algo.
+3. En **WhatsApp**, envíate el enlace en un chat. WhatsApp guarda las vistas previas un tiempo; para ver un cambio reciente, agrega `?v=2` al final.
+4. Prueba también `/productos` y `/nosotros`: cada una muestra su propio título y descripción.
 
 ### Siguiente mejora (opcional)
-Que al compartir **un producto** aparezca **su propia foto**. WhatsApp no ejecuta JavaScript, así que se necesita una *Pages Function* de Cloudflare (también gratis) que lea el producto de Supabase y escriba sus etiquetas en `producto.html`.
+Que al compartir **un producto** aparezca **su propia foto**. WhatsApp no ejecuta JavaScript, así que se necesita una *Pages Function* de Cloudflare (también gratis) que lea el producto de Supabase y escriba sus etiquetas en `/producto`.
 
 ---
 
@@ -151,11 +111,13 @@ Cuando cambien algo **en el código de la app**:
 
 ---
 
-## 5. Orden recomendado
+## 5. Estado y siguientes pasos
 
-1. ✅ Configurar Supabase (SQL, administrador). **Hecho.**
-2. Registrar el stock y el costo reales desde `admin.html`.
-3. Publicar la web en Cloudflare Pages (sección 2).
-4. Activar Open Graph con la dirección publicada (sección 3).
-5. Cambiar `servidor` en `mobile/src/config.js` y generar el APK (sección 4).
-6. Antes de la presentación: abrir la web una vez para confirmar que Supabase no está pausado.
+1. ✅ Supabase configurado: 42 productos, inventario y permisos.
+2. ✅ Web publicada en `https://raicesgt.pages.dev` con HTTPS.
+3. ✅ Open Graph activo con la dirección publicada.
+4. ✅ La app apunta a la web publicada para el botón **Compartir**.
+5. ⬜ Probar la vista previa en WhatsApp u opengraph.xyz (sección 3).
+6. ⬜ Generar el APK e instalarlo en los celulares (sección 4).
+7. ⬜ Registrar el stock y el costo reales desde `/admin`.
+8. ⬜ Antes de cada presentación, abrir la web para confirmar que Supabase no esté pausado.

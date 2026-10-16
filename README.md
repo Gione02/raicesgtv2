@@ -16,7 +16,9 @@ Sitio web y app Android de catálogo de textiles guatemaltecos: trajes típicos,
 - Productos e inventario se administran desde `admin.html`.
 - Guías: [`supabase/README.md`](supabase/README.md) (base de datos) · [`PUBLICAR.md`](PUBLICAR.md) (publicar web, Open Graph y APK) · [`mobile/README.md`](mobile/README.md) (app).
 
-> **Estado actual:** Supabase ya está configurado: 42 productos, inventario y permisos. Falta publicar la web en Cloudflare Pages, activar Open Graph con esa dirección y generar el APK. Más abajo está todo lo que falta.
+> **Web publicada:** **https://raicesgt.pages.dev** (panel: `/admin`).
+>
+> **Estado actual:** Supabase está configurado (42 productos, inventario y permisos), la web está publicada con HTTPS y Open Graph está activo. Falta generar el APK. Más abajo está todo lo que falta.
 
 ---
 
@@ -197,9 +199,10 @@ Edita `frontend/tailwind.config.js` (web) y `mobile/src/tema.js` (app).
 ## 5. Lo que falta para tener el proyecto al 100 %
 
 ### 🔴 Para la entrega
-- [ ] **Publicar la web** en Cloudflare Pages, gratis y con HTTPS. → [`PUBLICAR.md`](PUBLICAR.md), sección 2
-- [ ] **Activar Open Graph** con la dirección publicada (`frontend/sitio.json`). → [`PUBLICAR.md`](PUBLICAR.md), sección 3
-- [ ] Cambiar `servidor` en `mobile/src/config.js` por la dirección publicada y **generar el APK**. → [`PUBLICAR.md`](PUBLICAR.md), sección 4
+- [x] **Web publicada** en https://raicesgt.pages.dev (Cloudflare Pages, gratis, HTTPS). Se actualiza con `npm run publicar` dentro de `frontend/`. → [`PUBLICAR.md`](PUBLICAR.md), sección 2
+- [x] **Open Graph** activo con la dirección publicada. → [`PUBLICAR.md`](PUBLICAR.md), sección 3
+- [ ] Probar la vista previa en WhatsApp u [opengraph.xyz](https://www.opengraph.xyz).
+- [ ] **Generar el APK** (`npm run build:apk` dentro de `mobile/`) e instalarlo en los celulares. → [`PUBLICAR.md`](PUBLICAR.md), sección 4
 - [ ] Registrar el **stock real y el costo** de cada producto desde el panel (hoy todos tienen 1 pieza y no tienen costo).
 - [ ] Antes de cada presentación, abrir la web para confirmar que **Supabase no esté pausado**: el plan gratuito lo pausa tras 1 semana sin uso.
 
@@ -242,6 +245,6 @@ Estos textos y datos se escribieron o corrigieron con la información disponible
 Todo, paso a paso y gratis, en **[`PUBLICAR.md`](PUBLICAR.md)**:
 
 1. **Costos y límites** de los planes gratuitos.
-2. **Web en Cloudflare Pages**: `https://raicesgt.pages.dev`, con HTTPS automático y publicación sola en cada `git push`.
-3. **Open Graph**: poner la dirección en `frontend/sitio.json`, ejecutar `npm run build:og` y probar la vista previa.
+2. **Web en Cloudflare Pages**: ya publicada en `https://raicesgt.pages.dev`. Para actualizarla, ejecuta `npm run publicar` dentro de `frontend/`.
+3. **Open Graph**: activo; cómo funciona y cómo probar la vista previa.
 4. **APK**: generarlo con EAS (gratis) e instalarlo en los celulares.
