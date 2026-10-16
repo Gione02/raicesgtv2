@@ -64,6 +64,14 @@ Repite el paso para cada persona que deba editar el catálogo.
 
 Así nadie puede crearse una cuenta por su cuenta. Los usuarios con sesión pueden **leer** el precio y el costo internos (los necesita el panel), así que solo deben existir las cuentas que ustedes creen.
 
+### Si `02_productos.sql` da error
+
+| Mensaje | Qué hacer |
+|---|---|
+| `column "precio" does not exist` | Vuelve a ejecutar `01_esquema.sql` completo (agrega las columnas que falten) y luego `02_productos.sql`. |
+| `no unique or exclusion constraint matching the ON CONFLICT` | Igual: `01_esquema.sql` deja `id` como clave primaria. |
+| `relation "public.product" does not exist` | La tabla se renombró o se borró. Revisa en **Table Editor** cómo se llama ahora. |
+
 ### 6. Comprobar
 
 - Abre `productos.html`: deben aparecer los 42 productos.
