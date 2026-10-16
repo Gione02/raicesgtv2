@@ -25,7 +25,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "sync:catalogo": "node ../frontend/scripts/exportar-catalogo.js src/datos/productos.json"
+    "sync:catalogo": "node ../frontend/scripts/exportar-catalogo.js src/datos/productos.json",
+    "build:apk": "npx eas-cli@latest build -p android --profile apk"
   },
   "private": true
 }

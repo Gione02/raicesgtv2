@@ -19,6 +19,9 @@ App móvil del catálogo RaícesGT, hecha con **React Native + Expo** (SDK 57) y
 
 Cada vez que guardes un archivo, la app se actualiza sola en el celular.
 
+> **¿Error “la ejecución de scripts está deshabilitada” en PowerShell?** Es una protección de Windows. Usa `npx.cmd expo start` o permite los scripts locales una sola vez con:
+> `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
+
 ### Probar en la computadora
 
 - **Navegador:** `npx expo start --web` (útil para revisar diseño; no es la versión final).
@@ -55,7 +58,8 @@ Los colores están en `src/tema.js` y son los mismos de la web.
 
 ```
 mobile/
-├── app.json                 # Nombre, ícono, paquete de Android (com.raicesgt.app), permisos
+├── app.json                 # Nombre, ícono, paquete de Android (com.raicesgt.app), versión
+├── eas.json                 # Perfil "apk" para generar el APK con EAS Build
 ├── assets/                  # Íconos y pantalla de carga
 └── src/
     ├── app/                 # Pantallas (cada archivo es una ruta de Expo Router)
@@ -74,28 +78,27 @@ mobile/
 
 > Agrega librerías siempre con `npx expo install <paquete>`, no con `npm install`, para que la versión sea compatible con la SDK.
 
-## Generar el APK y publicar en Google Play
+## Generar el APK
 
-Se usa **EAS Build**, que compila en la nube; no hace falta Android Studio.
+La app se distribuye como **APK**, sin Google Play. Se compila gratis en la nube con EAS Build, sin necesidad de Android Studio. `eas.json` ya tiene listo el perfil `apk`.
 
 ```bash
-npm install -g eas-cli      # o usa: npx eas-cli@latest <comando>
-eas login                   # cuenta gratuita en expo.dev
-eas build:configure         # crea eas.json (solo la primera vez)
-
-# APK para instalar directo en celulares del equipo
-eas build -p android --profile preview
-
-# AAB para subir a Google Play
-eas build -p android --profile production
+cd mobile
+npx eas-cli@latest login      # cuenta gratuita en expo.dev
+npm run build:apk             # = eas build -p android --profile apk
 ```
 
-Para el APK de prueba, en `eas.json` el perfil `preview` debe tener `"android": { "buildType": "apk" }`.
+- La primera vez pide crear el proyecto en Expo (responde **Y**) y generar la firma de Android (deja que EAS la genere).
+- Al terminar aparece un **enlace y un código QR** para descargar el `.apk`. En el plan gratuito puede tardar desde minutos hasta más de una hora en horas pico.
+- **Para instalarlo:** abre el enlace en el celular, permite *Instalar apps de fuentes desconocidas* y, si aparece Play Protect, elige **Instalar de todas formas**.
+- **Nueva versión:** sube `version` y `versionCode` en `app.json` y vuelve a ejecutar `npm run build:apk`. Los cambios de **productos** no necesitan un APK nuevo: llegan solos desde Supabase.
 
-Publicar en Google Play requiere una **cuenta de desarrollador**, con un pago único de USD 25.
+Guía completa: [`PUBLICAR.md`](../PUBLICAR.md), sección 4.
+
+> En `assets/play/` quedaron un ícono de 512×512 y una imagen destacada, por si algún día deciden publicar en Google Play.
 
 ## Pendientes de la app
 
-- [ ] Cuando la web tenga dominio, cambiar `servidor` en `src/config.js` para que los enlaces de “Compartir” apunten ahí.
+- [ ] Cuando la web esté publicada en Cloudflare Pages, cambiar `servidor` en `src/config.js` (ej. `https://raicesgt.pages.dev`) para que los enlaces de “Compartir” apunten ahí.
+- [ ] Generar el APK e instalarlo en los celulares del equipo.
 - [ ] Probar en varios celulares Android, con pantallas pequeñas y grandes.
-- [ ] Crear la cuenta de Google Play y preparar la ficha. Paso a paso, textos de la ficha e imágenes listas en [`PUBLICAR.md`](../PUBLICAR.md) y `assets/play/`.

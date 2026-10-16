@@ -13,6 +13,7 @@
     },
     "android": {
       "package": "com.raicesgt.app",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#1e1b4b",
         "foregroundImage": "./assets/android-icon-foreground.png",

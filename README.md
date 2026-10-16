@@ -1,20 +1,22 @@
 # RaícesGT — Artesanías y Textiles Mayas, S.A.
 
-Sitio web y app Android de catálogo de textiles guatemaltecos: trajes típicos, huipiles, blusas y cortes. Los clientes navegan la colección, filtran por departamento, categoría o color, y consultan precio y disponibilidad por WhatsApp.
+Sitio web y app Android de catálogo de textiles guatemaltecos: trajes típicos, huipiles, blusas y cortes. Los clientes navegan la colección, filtran por departamento, categoría o color, y consultan precio y disponibilidad por WhatsApp. El personal administra el catálogo y el inventario desde un panel privado.
+
+> Proyecto universitario. Todo funciona con **planes gratuitos**: Supabase, Cloudflare Pages y Expo. Ver costos en [`PUBLICAR.md`](PUBLICAR.md).
 
 **Arquitectura:**
 
 ```
   Web (frontend/) ──┐
-                    ├──>  Supabase  (tabla product + fotos en Storage + login de administradores)
+                    ├──>  Supabase  (productos, inventario, fotos y login de administradores)
   App (mobile/)  ───┘
 ```
 
-- No hay servidor de API propio: la web y la app leen directo de **Supabase**.
-- Los productos se administran desde `admin.html`.
-- Guía de Supabase: [`supabase/README.md`](supabase/README.md).
+- No hay servidor de API propio: la web y la app leen **directo de Supabase** por HTTPS.
+- Productos e inventario se administran desde `admin.html`.
+- Guías: [`supabase/README.md`](supabase/README.md) (base de datos) · [`PUBLICAR.md`](PUBLICAR.md) (publicar web, Open Graph y APK) · [`mobile/README.md`](mobile/README.md) (app).
 
-> **Estado actual:** la web y la app ya leen de Supabase. Falta que el equipo ejecute la configuración inicial ([`supabase/README.md`](supabase/README.md)) y publicar el sitio con dominio. Más abajo está todo lo que falta para dejarlo al 100 %.
+> **Estado actual:** Supabase ya está configurado: 42 productos, inventario y permisos. Falta publicar la web en Cloudflare Pages, activar Open Graph con esa dirección y generar el APK. Más abajo está todo lo que falta.
 
 ---
 
@@ -24,37 +26,20 @@ Sitio web y app Android de catálogo de textiles guatemaltecos: trajes típicos,
 2. [Estructura del proyecto](#2-estructura-del-proyecto)
 3. [Tareas comunes](#3-tareas-comunes)
 4. [Lo que ya está hecho](#4-lo-que-ya-está-hecho)
-5. [Lo que falta para tener el sitio al 100 %](#5-lo-que-falta-para-tener-el-sitio-al-100-)
+5. [Lo que falta para tener el proyecto al 100 %](#5-lo-que-falta-para-tener-el-proyecto-al-100-)
 6. [Contenido que el equipo debe revisar](#6-contenido-que-el-equipo-debe-revisar)
-7. [Pasos para publicarlo en internet](#7-pasos-para-publicarlo-en-internet)
+7. [Publicar](#7-publicar)
 
 ---
 
 ## 1. Cómo abrir el proyecto
 
-### Opción A — Con Docker (recomendada)
-
-Requisitos: [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado y **abierto**.
-
 ```bash
-git clone <url-del-repositorio>
-cd <carpeta-del-repositorio>
-docker compose up -d --build
+git clone https://github.com/Gione02/raicesgtv2.git
+cd raicesgtv2
 ```
 
-Luego abre **http://localhost** en el navegador.
-
-Cada vez que cambies algo dentro de `frontend/` (productos, imágenes, páginas), vuelve a ejecutar:
-
-```bash
-docker compose up -d --build
-```
-
-y recarga el navegador con **Ctrl + F5**.
-
-> ¿No ves los cambios? Casi siempre es porque no se reconstruyó la imagen. Docker copia los archivos **al construir**, no los lee en vivo.
-
-### Opción B — Sin Docker (para editar el diseño)
+### Web — Opción A: sin Docker (la más simple)
 
 Requisitos: [Node.js](https://nodejs.org/) 18 o superior.
 
@@ -64,15 +49,25 @@ npm install          # solo la primera vez
 npm run watch:css    # genera public/css/styles.css y se queda vigilando cambios
 ```
 
-En otra terminal, sirve la carpeta `frontend/public`. Por ejemplo:
+En **otra** terminal:
 
 ```bash
 npx serve frontend/public
 ```
 
-o abre `frontend/public/index.html` con la extensión **Live Server** de VS Code.
+Abre la dirección que muestra la terminal (normalmente http://localhost:3000). También puedes usar la extensión **Live Server** de VS Code sobre `frontend/public/index.html`.
 
-> **Importante:** si abres los HTML sin haber ejecutado `npm run build:css` o `npm run watch:css`, la página se verá **sin estilos**. El archivo `styles.css` se genera; no se sube a GitHub.
+> **Importante:** si abres los HTML sin haber ejecutado `npm run build:css` o `npm run watch:css`, la página se verá **sin estilos**. `styles.css` se genera; no se sube a GitHub.
+
+### Web — Opción B: con Docker (opcional)
+
+Docker **ya no es necesario**. Hoy solo hace una cosa: compila el CSS y sirve la carpeta `frontend/public` con **nginx** en http://localhost, igual que en un servidor real. Sirve para probar la versión final o para montarla en un servidor propio.
+
+```bash
+docker compose up -d --build     # requiere Docker Desktop abierto
+```
+
+Después de cada cambio en `frontend/`, vuelve a ejecutar el comando y recarga con **Ctrl + F5**.
 
 ### App Android
 
@@ -84,13 +79,14 @@ npm install
 npx expo start
 ```
 
-Escanea el código QR con Expo Go. Más detalles en [`mobile/README.md`](mobile/README.md).
+Escanea el código QR con Expo Go. Más detalles, y cómo generar el **APK**, en [`mobile/README.md`](mobile/README.md).
+
+> **¿Error “la ejecución de scripts está deshabilitada” en PowerShell?** Usa `npx.cmd` en lugar de `npx`, o ejecuta una vez:
+> `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`
 
 ### Base de datos (Supabase)
 
-La web y la app **no necesitan** un archivo `.env`: la dirección de Supabase y la clave *publishable* (pública por diseño) están en `frontend/public/js/config.js` y `mobile/src/config.js`.
-
-La configuración inicial de las tablas, los permisos y el usuario administrador está en [`supabase/README.md`](supabase/README.md).
+La web y la app **no necesitan** un archivo `.env`: la dirección de Supabase y la clave *publishable* (pública por diseño) están en `frontend/public/js/config.js` y `mobile/src/config.js`. Las tablas, los permisos y los administradores se explican en [`supabase/README.md`](supabase/README.md).
 
 > La clave **secret** de Supabase nunca va en el código ni en GitHub.
 
@@ -99,15 +95,15 @@ La configuración inicial de las tablas, los permisos y el usuario administrador
 ## 2. Estructura del proyecto
 
 ```
-├── PUBLICAR.md               # Guía: dominio, HTTPS, Open Graph y Google Play
-├── docker-compose.yml        # Sirve la web con nginx
+├── PUBLICAR.md               # Costos, publicar en Cloudflare, Open Graph y APK
+├── docker-compose.yml        # (Opcional) sirve la web con nginx
 ├── .env.example              # Referencia de los datos de conexión (sin claves secretas)
-├── supabase/                 # SQL de tablas y permisos + carga inicial — ver supabase/README.md
+├── supabase/                 # SQL de tablas, permisos, productos e inventario — ver supabase/README.md
 ├── mobile/                   # App Android (React Native + Expo) — ver mobile/README.md
 └── frontend/
-    ├── Dockerfile            # Compila Tailwind y sirve el sitio con nginx
-    ├── package.json          # Scripts build, build:css, watch:css y build:og
-    ├── sitio.json            # Dominio e imagen para compartir (Open Graph)
+    ├── Dockerfile            # (Opcional) compila Tailwind y sirve el sitio con nginx
+    ├── package.json          # Scripts: build, build:css, watch:css, build:og
+    ├── sitio.json            # Dirección de la web e imagen para compartir (Open Graph)
     ├── scripts/open-graph.js # Escribe las etiquetas Open Graph en cada página
     ├── tailwind.config.js    # Colores, tipografías y tamaños del diseño
     ├── src/input.css         # Estilos propios (franja textil, páginas de texto)
@@ -120,8 +116,8 @@ La configuración inicial de las tablas, los permisos y el usuario administrador
         ├── privacidad.html   # Política de privacidad (texto base)
         ├── terminos.html     # Términos de servicio (texto base)
         ├── sostenibilidad.html
-        ├── admin.html        # Panel para administrar el catálogo (con inicio de sesión)
-        ├── img/              # Copia local de las fotos y favicon
+        ├── admin.html        # Panel privado: catálogo e inventario
+        ├── img/              # Copia local de las fotos, favicon e imagen para compartir
         └── js/
             ├── config.js     # Supabase, WhatsApp y redes sociales ← se edita aquí
             ├── datos.js      # Lee los productos de Supabase
@@ -140,7 +136,7 @@ La configuración inicial de las tablas, los permisos y el usuario administrador
 
 ### Panel de administración (`admin.html`)
 
-Abre `admin.html` en el sitio publicado o en `http://localhost/admin.html` e inicia sesión con tu cuenta de administrador. Las cuentas se crean en Supabase; ver [`supabase/README.md`](supabase/README.md). La primera vez aparece una guía corta.
+Abre `admin.html` en el sitio publicado o en local e inicia sesión con tu cuenta de administrador. Las cuentas se crean en Supabase; ver [`supabase/README.md`](supabase/README.md). La primera vez aparece una guía corta.
 
 **Pestaña Catálogo**
 - **+ Agregar producto**: arrastra la foto, elige la categoría con un botón, llena los datos y mira la **vista previa** de cómo se verá en la web.
@@ -152,98 +148,76 @@ Abre `admin.html` en el sitio publicado o en `http://localhost/admin.html` e ini
 - Botones **Venta**, **Entrada** y **Ajustar** en cada producto: el stock se actualiza solo y queda en el historial. Si una venta deja el producto en 0, ofrece ocultarlo del catálogo.
 - **Descargar Excel (CSV)** con todo el inventario.
 
-Todo aparece **al instante** en la web y en la app, sin reconstruir Docker. Los productos con id más alto aparecen como “recién agregados” en el inicio.
-
-Reglas para los datos:
+Todo aparece **al instante** en la web y en la app, sin publicar de nuevo ni generar otro APK. Los productos con id más alto aparecen como “recién agregados” en el inicio.
 
 | Campo | Regla | Ejemplo |
 |---|---|---|
 | Categoría | Una de: `Traje`, `Traje de gala`, `Huipil`, `Blusa`, `Corte` | `Huipil` |
 | Departamento | Se elige de la lista (con tildes) | `Sololá` |
 | Descripción | Que no repita el nombre: origen, técnica, colores, ocasión | — |
-| Precio | Interno: **no** se muestra al público | `3500` |
+| Precio y costo | Internos: **no** se muestran al público | `3500` |
 
 ### Cambiar el número de WhatsApp o las redes sociales
 
-Edita `frontend/public/js/config.js`. Las redes que queden vacías (`""`) no se muestran.
+Edita `frontend/public/js/config.js` (web) y `mobile/src/config.js` (app). Las redes vacías (`""`) no se muestran.
 
 ### Cambiar colores del diseño
 
-Edita `frontend/tailwind.config.js` (sección `colors`) y reconstruye.
+Edita `frontend/tailwind.config.js` (web) y `mobile/src/tema.js` (app).
 
 ---
 
 ## 4. Lo que ya está hecho
 
+**Web**
 - [x] Cabecera con color y franja textil, menú para celular y pie de página iguales en todas las páginas
-- [x] Botón de WhatsApp (+502 3635 5457) en la cabecera, flotante, en el inicio, en cada producto y en contacto
-- [x] Enlaces a Facebook e Instagram
-- [x] Catálogo con buscador sin importar tildes, filtros por departamento, categoría y color, y orden
-- [x] Vista en **columnas** o **lista**; el navegador recuerda la elegida
-- [x] Los filtros quedan en la URL para compartirlos (ej. `productos.html?departamento=solola`)
-- [x] Página propia por producto, con botón **Compartir** y productos relacionados
-- [x] “Agregados recientemente” del inicio se genera solo con los últimos productos
-- [x] Descripciones nuevas para los 42 productos y datos normalizados (tildes, categorías, nombres)
-- [x] Páginas de Contacto, Privacidad, Términos y Sostenibilidad
-- [x] Catálogo en **Supabase**: la web y la app leen la misma base de datos
-- [x] Panel `admin.html` pensado para el personal del negocio: tarjetas con foto, interruptor Visible, foto arrastrable, vista previa, guía de bienvenida, cómodo en el celular
+- [x] WhatsApp (+502 3635 5457) en la cabecera, flotante, en el inicio, en cada producto y en contacto; Facebook e Instagram
+- [x] Catálogo con buscador sin importar tildes, filtros por departamento, categoría y color, orden y vista **columnas / lista**
+- [x] Filtros en la URL para compartirlos (ej. `productos.html?departamento=solola`)
+- [x] Página propia por producto, con **Compartir** y productos relacionados
+- [x] “Agregados recientemente” automático en el inicio
+- [x] Páginas de Contacto, **Sobre nosotros**, Privacidad, Términos y Sostenibilidad
+- [x] **Open Graph** en todas las páginas públicas e imagen para compartir de 1200×630
+- [x] Íconos SVG, imágenes sin espacios en el nombre, Tailwind compilado y favicon
+
+**Datos y administración**
+- [x] Catálogo en **Supabase**: 42 productos con descripciones nuevas y datos normalizados
+- [x] Permisos: el público no ve precio, costo ni inventario; solo los administradores editan
+- [x] Panel `admin.html` para el personal del negocio, con inicio de sesión, tarjetas con foto, interruptor Visible, foto arrastrable y vista previa
 - [x] **Inventario** privado: stock, costo, margen, aviso de stock bajo, ventas/entradas/ajustes con historial y exportación a Excel
-- [x] El precio y el costo no se publican (permisos por columna en Supabase)
-- [x] Se retiraron Oracle y el API en FastAPI (el código sigue en la rama `frontend` del repositorio original)
-- [x] Íconos que mostraban texto (“search”, “arrow_forward”) reemplazados por SVG
-- [x] Imágenes renombradas sin espacios (`traje-01.jpeg`…)
-- [x] Tailwind compilado en el build en lugar del CDN de desarrollo
-- [x] Favicon
-- [x] **Open Graph** en todas las páginas públicas: tarjeta con imagen, título y descripción al compartir (`npm run build:og`)
-- [x] Página **Sobre nosotros** (`nosotros.html`) en la web y en la app, con los departamentos de origen calculados del catálogo
-- [x] App Android inicial (React Native + Expo): Inicio, Colección con filtros y vista columnas/lista, detalle, contacto
+- [x] Registros públicos desactivados; Oracle y FastAPI retirados
+
+**App Android**
+- [x] React Native + Expo: Inicio, Colección con filtros y vista columnas/lista, detalle, Contacto y Sobre nosotros
+- [x] Conectada a Supabase (comprobado: recibe los 42 productos), con copia incluida para funcionar sin internet
+- [x] Ícono y pantalla de carga; perfil listo para generar el **APK** (`npm run build:apk`)
 
 ---
 
-## 5. Lo que falta para tener el sitio al 100 %
+## 5. Lo que falta para tener el proyecto al 100 %
 
-Ordenado por prioridad. Los marcados con 🔴 deben resolverse antes de publicar.
+### 🔴 Para la entrega
+- [ ] **Publicar la web** en Cloudflare Pages, gratis y con HTTPS. → [`PUBLICAR.md`](PUBLICAR.md), sección 2
+- [ ] **Activar Open Graph** con la dirección publicada (`frontend/sitio.json`). → [`PUBLICAR.md`](PUBLICAR.md), sección 3
+- [ ] Cambiar `servidor` en `mobile/src/config.js` por la dirección publicada y **generar el APK**. → [`PUBLICAR.md`](PUBLICAR.md), sección 4
+- [ ] Registrar el **stock real y el costo** de cada producto desde el panel (hoy todos tienen 1 pieza y no tienen costo).
+- [ ] Antes de cada presentación, abrir la web para confirmar que **Supabase no esté pausado**: el plan gratuito lo pausa tras 1 semana sin uso.
 
-### 🔴 Seguridad
-
-- [x] Servidor Oracle (`163.192.133.68`): el puerto 1521 ya no responde (comprobado el 16/10/2026). Si se vuelve a encender, cambiar antes sus contraseñas: están en el historial de Git. `.env` ya no se versiona.
-- [x] Registros públicos desactivados en Supabase (comprobado el 16/10/2026).
-- [x] Login real en `admin.html` (Supabase Auth + lista de administradores).
-
-### 🔴 Configuración de Supabase (una sola vez)
-
-Pasos detallados en [`supabase/README.md`](supabase/README.md):
-
-- [ ] Ejecutar `supabase/01_esquema.sql` **completo**, incluida la parte de Storage (tablas, permisos y fotos).
-- [ ] Ejecutar `supabase/02_productos.sql` (los 42 productos).
-- [ ] Ejecutar `supabase/03_inventario.sql` (inventario e historial).
-- [ ] Crear el usuario administrador y agregar su correo a `administradores`.
-- [ ] Registrar el stock real y el costo de cada producto desde el panel.
-- [x] Fotos en el bucket `catalogo` (ya estaban las 43).
-
-Mientras `product` esté vacía, la web y la app muestran la copia de respaldo con los 42 productos.
+### 🟡 Mejoras opcionales
+- [ ] Vista previa con la **foto de cada producto** al compartirlo (Pages Function de Cloudflare). → [`PUBLICAR.md`](PUBLICAR.md), sección 3
+- [ ] `sitemap.xml`, `robots.txt` y Google Search Console.
+- [ ] Dominio propio, ~USD 10–15 al año. No es necesario: `*.pages.dev` funciona con HTTPS.
+- [ ] Cuenta de **TikTok** (se agrega en `config.js`).
+- [ ] Revisar si la tabla `admin` de Supabase todavía se usa; el panel usa `administradores`.
 
 ### ✅ Decisiones del equipo (octubre 2026)
 
-Estos puntos se evaluaron y **no se van a implementar**:
+Se evaluaron y **no se van a implementar**:
 
-- **No se muestran precios.** El sitio sigue con “Consulta precio y disponibilidad” por WhatsApp. El campo `precio` se mantiene en los datos solo para uso interno.
-- **No habrá carrito ni pedidos en línea.** Las ventas se coordinan por WhatsApp.
-- **No se comprimen ni convierten las imágenes.** Se conservan las fotos originales.
-
-### 🟡 SEO y redes sociales
-
-- [ ] Subir `frontend/public/img/compartir.jpg` al bucket `catalogo` de Supabase, para que la imagen de vista previa funcione antes de tener dominio.
-- [ ] Vista previa con la foto de **cada producto** (requiere hosting con funciones; ver [`PUBLICAR.md`](PUBLICAR.md), sección 3).
-- [ ] `sitemap.xml` y `robots.txt`.
-- [ ] Registrar el sitio en **Google Search Console** cuando tenga dominio.
-- [ ] Generar las páginas de producto en el servidor, para que Google lea su contenido sin ejecutar JavaScript.
-
-### 🟡 Otros
-
-- [ ] Cuenta de **TikTok** (opcional). Se agrega en `config.js`.
-- [ ] **App Android** (`mobile/`): versión inicial lista con React Native + Expo (Inicio, Colección con filtros, detalle y contacto). Ya lee de Supabase. Pendientes en [`mobile/README.md`](mobile/README.md): pruebas en varios celulares y publicación en Google Play.
-- [ ] Estadísticas de visitas (Google Analytics o similar).
+- **No se muestran precios.** Se mantiene “Consulta precio y disponibilidad” por WhatsApp; el precio queda solo para uso interno.
+- **No habrá carrito ni pedidos en línea.** Las ventas se coordinan por WhatsApp y se registran en el inventario.
+- **No se comprimen ni convierten las imágenes.**
+- **La app no se publica en Google Play.** Se distribuye como APK.
 
 ---
 
@@ -251,34 +225,23 @@ Estos puntos se evaluaron y **no se van a implementar**:
 
 Estos textos y datos se escribieron o corrigieron con la información disponible. **Alguien que conozca los productos debe confirmarlos.**
 
-- [ ] **Descripciones de los 42 productos** (se editan en `admin.html`): confirmar que la información de cada pieza sea correcta.
-- [ ] **“San Lucas” (productos #8 y #12)**: están en el departamento *Guatemala*. ¿Es San Lucas Sacatepéquez, San Lucas Tolimán u otro?
+- [ ] **Descripciones de los 42 productos** (se editan en `admin.html`).
+- [ ] **“San Lucas” (#8 y #12)**: están en el departamento *Guatemala*. ¿Es San Lucas Sacatepéquez, San Lucas Tolimán u otro?
 - [ ] **“Sacatepéquez” (#26)** y **“San Pedro” (#36)**: el municipio está incompleto.
-- [ ] **Precios que parecen inconsistentes** (no se muestran en el sitio, pero se usan al responder consultas):
+- [ ] **Precios que parecen inconsistentes** (no se publican, pero se usan al responder consultas y en el inventario):
   - #1 “Traje de Patzún” completo a **Q350**, mientras varias blusas cuestan Q3,500.
   - Blusas de Patzún entre **Q1,900 y Q3,500**; las de San Lucas Tolimán cuestan **Q900**.
-- [ ] **Privacidad, Términos y Sostenibilidad**: son textos base. Confirmar, entre otras cosas:
-  - formas de pago aceptadas,
-  - política de cambios y devoluciones,
-  - tiempos y costos de envío,
-  - qué se dice sobre el trabajo con artesanas.
-- [ ] **Preguntas frecuentes** de `contacto.html`.
-- [ ] **Sección “Nuestra historia”** del inicio y **página “Sobre nosotros”**: hoy tienen un texto general. Busquen los comentarios `<!-- EQUIPO: ... -->` en `nosotros.html` y cuenten su historia real. Si las artesanas lo autorizan, se pueden agregar sus perfiles. Si cambian el texto, actualicen también `mobile/src/app/nosotros.js`.
+- [ ] **Privacidad, Términos y Sostenibilidad**: textos base. Confirmar formas de pago, cambios y devoluciones, envíos y el trabajo con artesanas.
+- [ ] **Preguntas frecuentes** de `contacto.html` (y de la pantalla Contacto de la app).
+- [ ] **“Nuestra historia” y “Sobre nosotros”**: hoy tienen un texto general. Busquen los comentarios `<!-- EQUIPO: ... -->` en `nosotros.html`. Si cambian el texto, actualicen también `mobile/src/app/nosotros.js`. Los perfiles de artesanas, solo con su permiso.
 
 ---
 
-## 7. Pasos para publicarlo en internet
+## 7. Publicar
 
-> **Guía completa** —dominio recomendado, Cloudflare Pages con HTTPS, Open Graph y Google Play paso a paso—: [`PUBLICAR.md`](PUBLICAR.md).
+Todo, paso a paso y gratis, en **[`PUBLICAR.md`](PUBLICAR.md)**:
 
-Hoy el sitio corre en `http://localhost` o en el servidor de prueba del equipo, sin dominio ni HTTPS. Para que el público lo vea:
-
-1. **Resolver los puntos 🔴** de la sección 5 (servidor Oracle y configuración de Supabase).
-2. **Comprar un dominio**, por ejemplo `raicesgt.com` o `raicesgt.com.gt`.
-3. **Elegir dónde alojarlo:**
-   - *Recomendado:* hosting estático gratuito (Netlify, Vercel, Cloudflare Pages o GitHub Pages). La base de datos ya está en Supabase, así que no hace falta un servidor propio. Comando de build: `npm install && npm run build:css` dentro de `frontend/`; carpeta a publicar: `frontend/public`.
-   - *Alternativa:* un servidor VPS que ejecute `docker compose up -d --build`.
-4. **Apuntar el dominio** al hosting, con registros DNS en el proveedor del dominio.
-5. **Activar HTTPS** (el candado). Los hostings estáticos lo hacen solos; en un VPS se configura gratis con Let’s Encrypt.
-6. **Probar en celular y computadora**: catálogo, filtros, página de producto, botones de WhatsApp y enlaces del pie de página.
-7. **Registrar el sitio en Google Search Console** y compartir el enlace en Facebook e Instagram.
+1. **Costos y límites** de los planes gratuitos.
+2. **Web en Cloudflare Pages**: `https://raicesgt.pages.dev`, con HTTPS automático y publicación sola en cada `git push`.
+3. **Open Graph**: poner la dirección en `frontend/sitio.json`, ejecutar `npm run build:og` y probar la vista previa.
+4. **APK**: generarlo con EAS (gratis) e instalarlo en los celulares.

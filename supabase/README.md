@@ -114,11 +114,16 @@ Los cambios se ven **al instante**, sin reconstruir Docker ni publicar una versi
 
 Estas copias **no** se actualizan solas. Si cambian mucho el catálogo, conviene actualizarlas de vez en cuando.
 
-## Pendientes para el equipo
+## Estado (16/10/2026)
 
-- [ ] Ejecutar `01_esquema.sql` (completo), `02_productos.sql` y `03_inventario.sql`.
-- [ ] Crear el usuario administrador y agregar su correo a `administradores`.
+- [x] `01_esquema.sql`, `02_productos.sql` y `03_inventario.sql` ejecutados: `product` tiene 42 productos, el precio no es público y `inventario` es privado.
+- [x] Registros públicos desactivados.
+- [x] La web y la app leen los productos de Supabase (comprobado).
 - [ ] Registrar el **stock real** y el **costo** de cada producto: Inventario → **Ajustar**, y **Editar** para el costo.
-- [ ] Revisar para qué se creó la tabla `admin`. Este esquema usa `administradores`; si `admin` ya no se necesita, se puede borrar.
-- [ ] Ventas, facturas y contabilidad del esquema de Oracle **no** se migraron: el equipo vende por WhatsApp y el historial de ventas queda en `inventario_movimientos`.
-- [ ] Si se vuelve a encender el servidor Oracle (`163.192.133.68`), cambiar antes sus contraseñas; están en el historial de Git.
+- [ ] Revisar si la tabla `admin` todavía se usa. El panel usa `administradores`; si `admin` ya no se necesita, se puede borrar.
+- [ ] **Plan gratuito:** Supabase pausa el proyecto tras **1 semana sin actividad**. Antes de una presentación, abran la web o el panel; si está pausado, reactívenlo en el panel de Supabase (**Restore project**).
+
+## Notas
+
+- Ventas, facturas y contabilidad del esquema de Oracle **no** se migraron: el equipo vende por WhatsApp y el historial de ventas queda en `inventario_movimientos`.
+- Si se vuelve a encender el servidor Oracle (`163.192.133.68`), cambien antes sus contraseñas: están en el historial de Git.

@@ -1,147 +1,161 @@
 # Guía de publicación — RaícesGT
 
-Cómo poner la web en internet con dominio propio y HTTPS, cómo funcionan las vistas previas al compartir (Open Graph) y cómo publicar la app en Google Play.
+Cómo poner la web en internet **gratis** con HTTPS, cómo activar la vista previa al compartir (Open Graph) y cómo generar el **APK** de la app.
 
-> Esto es para **más adelante**. Antes hay que terminar la configuración de Supabase ([`supabase/README.md`](supabase/README.md)).
+> Es un proyecto universitario: todo lo de esta guía se puede hacer con **USD 0**. Lo único opcional que cuesta es un dominio propio.
 
 ---
 
-## 1. Dominio
+## 1. Cuánto cuesta
 
-### Recomendación
+| Servicio | Para qué | Plan | Costo |
+|---|---|---|---|
+| **Cloudflare Pages** | Publicar la web con HTTPS | Gratis | **USD 0** |
+| **Supabase** | Base de datos, fotos y login | Gratis | **USD 0** |
+| **Expo (EAS Build)** | Generar el APK en la nube | Gratis | **USD 0** |
+| Dominio propio (`.com`) | Dirección más bonita | *Opcional* | ~USD 10–15 al año |
+| Google Play | Publicar en la tienda | No se usará | — |
 
-| Opción | Disponible* | Comentario |
-|---|---|---|
-| `raicesgt.com` | ❌ ya registrado por otra persona | — |
-| **`raicesdeguatemala.com`** | ✅ | Claro, fácil de dictar por teléfono, coincide con el título de la web. **Recomendado.** |
-| `tiendaraicesgt.com` | ✅ | Mantiene la marca “RaícesGT”. |
-| `textilesraicesgt.com` | ✅ | Deja claro qué venden. |
-| `raicesgt.shop` / `raicesgt.store` | ✅ | Más cortos, pero las terminaciones nuevas generan menos confianza que `.com`. |
-| `raicesgt.com.gt` | ? | Opcional para proteger la marca en Guatemala. Se registra en el Registro .GT (UVG) y suele costar más que un `.com`. |
+### Límites de los planes gratuitos (consultados en octubre de 2026)
 
-\* Consultado el 16/10/2026 en los registros públicos (RDAP). La disponibilidad puede cambiar: confírmenla al comprar.
+- **Cloudflare Pages:** 500 publicaciones al mes, hasta 20 000 archivos y 25 MB por archivo. Incluye la dirección `https://<nombre>.pages.dev` con HTTPS. Para este proyecto, el límite no se alcanza.
+- **Supabase:** 500 MB de base de datos, 1 GB de fotos, 5 GB de transferencia al mes y 2 proyectos activos.
+  ⚠️ **Los proyectos gratuitos se pausan tras 1 semana sin actividad.** Si nadie abre la web ni la app durante una semana, Supabase pausa el proyecto. Se reactiva desde el panel de Supabase (**Restore project**). Mientras está pausado, la web y la app muestran la copia de respaldo con los 42 productos, así que no se ven vacías. **Revisen que esté activo antes de cada presentación.**
+- **Expo:** hasta 15 compilaciones de Android en el plan gratuito, en la cola de baja prioridad. En horas pico la espera puede pasar de 90 minutos.
 
-**Dónde comprarlo:** en **Cloudflare Registrar**, que vende al precio de costo, sin recargos al renovar y con privacidad WHOIS incluida. Encaja con el hosting recomendado abajo. Namecheap o Porkbun también son buenas opciones.
+---
 
-> Un `.com` cuesta alrededor de USD 10–15 al año. Activen la **renovación automática**: si el dominio vence, cualquiera puede comprarlo.
+## 2. Publicar la web en Cloudflare Pages (gratis, con HTTPS)
 
-## 2. Hosting y HTTPS
-
-### Recomendación: Cloudflare Pages (gratis)
-
-La web es estática y la base de datos ya está en Supabase, así que **no hace falta un servidor propio**.
-
-- **Gratis**, rápido en Guatemala y en todo el mundo (CDN).
-- **HTTPS automático**: el certificado se crea y se renueva solo.
-- **Se publica solo** cada vez que suben cambios a GitHub.
-
-**Pasos:**
-
-1. Cuenta gratis en [dash.cloudflare.com](https://dash.cloudflare.com) → **Workers & Pages → Create → Pages → Connect to Git** → elijan el repositorio.
-2. Configuración de build:
+1. Crea una cuenta gratis en [dash.cloudflare.com](https://dash.cloudflare.com).
+2. **Workers & Pages → Create → Pages → Connect to Git** y autoriza GitHub. Elige el repositorio **raicesgtv2**.
+3. **Nombre del proyecto:** `raicesgt`. Será la dirección `https://raicesgt.pages.dev`; el 16/10/2026 estaba libre.
+4. Configuración de build:
 
    | Campo | Valor |
    |---|---|
+   | Production branch | `main` |
    | Framework preset | None |
    | Build command | `cd frontend && npm ci && npm run build` |
    | Build output directory | `frontend/public` |
 
-3. **Custom domains → Set up a domain**: escriban su dominio. Si lo compraron en Cloudflare, los DNS se configuran solos.
-4. En **SSL/TLS** del dominio: modo **Full (strict)** y activen **Always Use HTTPS**.
+5. **Save and Deploy**. En 1–2 minutos la web queda en `https://raicesgt.pages.dev`, **con HTTPS automático**.
 
-> **Alternativas:** Netlify o Vercel funcionan igual (gratis, HTTPS automático). Si prefieren el servidor del equipo con Docker, necesitan configurar el certificado con Let’s Encrypt (por ejemplo con Caddy o Certbot). Es más trabajo y más mantenimiento.
+Desde entonces, **cada vez que suban cambios a `main` en GitHub, Cloudflare publica la nueva versión sola**.
 
-### Después de tener dominio, cambiar en 3 lugares
+> Docker ya no es necesario para publicar. Sigue en el proyecto, como opción, para verla en la computadora o montarla en un servidor propio.
 
-| Archivo | Qué cambiar |
-|---|---|
-| `frontend/sitio.json` | `"url": "https://su-dominio.com"` y luego `npm run build:og` |
-| `mobile/src/config.js` | `servidor: "https://su-dominio.com"` (enlaces de “Compartir” de la app) |
-| Supabase → Authentication → URL Configuration | **Site URL**: `https://su-dominio.com` |
+### Después de publicar, actualizar la dirección en la app
 
-## 3. Vista previa al compartir (Open Graph)
+En `mobile/src/config.js` cambien:
 
-Ya está implementado. Cada página tiene las etiquetas `og:*`, así que al pegar un enlace en WhatsApp, Facebook o Instagram aparece una tarjeta con **imagen, título y descripción**.
-
-- La imagen es [`frontend/public/img/compartir.jpg`](frontend/public/img/compartir.jpg) (1200×630).
-- Las etiquetas se generan con `npm run build:og` dentro de `frontend/`, a partir del `<title>` y la descripción de cada página. La configuración está en `frontend/sitio.json`.
-
-**Mientras no haya dominio:** la imagen se toma de Supabase. **Suban `compartir.jpg` una vez** al bucket `catalogo`:
-Supabase → **Storage → catalogo → Upload file** → `frontend/public/img/compartir.jpg`.
-
-**Probar la vista previa** (cuando el sitio esté publicado):
-- [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/): pega el enlace y pulsa “Scrape again” si cambiaron algo.
-- WhatsApp guarda la vista previa un tiempo: para probar cambios, agreguen `?v=2` al final del enlace.
-
-**Siguiente mejora (opcional):** que cada producto muestre **su propia foto** al compartirlo. WhatsApp y Facebook no ejecutan JavaScript, así que hay que agregar las etiquetas en el servidor. Con Cloudflare Pages se hace con una *Pages Function* que lee el producto de Supabase e inserta sus etiquetas en `producto.html`.
-
-## 4. Google Play
-
-### 4.1 Cuenta de desarrollador
-
-- Pago único de **USD 25** en [play.google.com/console](https://play.google.com/console).
-- **Tipo de cuenta:**
-  - **Organización (recomendada para una S.A.):** pide un **número D-U-N-S** de la empresa (gratis, tarda unos días). Publican directamente.
-  - **Personal:** Google exige una **prueba cerrada con al menos 12 personas durante 14 días seguidos** antes de publicar al público. Así era la regla para cuentas personales nuevas en 2025; confírmenla al registrarse.
-- Google verifica la identidad: tengan a mano DPI o pasaporte, o los documentos de la empresa.
-
-### 4.2 Lo que pide la ficha de la tienda
-
-| Requisito | Estado |
-|---|---|
-| Ícono 512×512 | ✅ [`mobile/assets/play/icono-google-play.png`](mobile/assets/play/icono-google-play.png) |
-| Imagen destacada 1024×500 | ✅ [`mobile/assets/play/destacada-google-play.png`](mobile/assets/play/destacada-google-play.png) |
-| Capturas de pantalla del celular (mínimo 2, ideal 4–8) | ⬜ Tómenlas desde la app: Inicio, Colección, Detalle, Nosotros |
-| Descripción corta (máx. 80 caracteres) | Borrador abajo |
-| Descripción completa (máx. 4000) | Borrador abajo |
-| **URL de política de privacidad** | ⬜ Necesita el dominio: `https://su-dominio.com/privacidad.html` |
-| Formulario **Seguridad de los datos** | ⬜ Ver respuestas sugeridas abajo |
-| Clasificación de contenido (cuestionario) | ⬜ Responder: sin violencia, sin contenido sensible |
-| Público objetivo | ⬜ Mayores de 18 o 13+ (no es una app para niños) |
-| Anuncios | No contiene anuncios |
-| Categoría | Compras |
-
-**Descripción corta (borrador):**
-> Trajes típicos, huipiles y cortes de Guatemala. Consulta por WhatsApp.
-
-**Descripción completa (borrador):**
-> Descubre la riqueza textil de Guatemala en tu celular. En RaícesGT encontrarás trajes típicos, huipiles, blusas bordadas y cortes de diferentes municipios y departamentos del país.
->
-> • Explora la colección por departamento, categoría o color.
-> • Mira cada pieza en detalle: origen, colores y descripción.
-> • Consulta precio, medidas y disponibilidad directamente por WhatsApp.
-> • Comparte tus piezas favoritas con familia y amigos.
->
-> Cada textil guarda técnicas, símbolos y colores que pasan de generación en generación. Nuestra misión es acercar esa tradición a nuevas generaciones y valorar el trabajo artesanal que hay detrás de cada pieza.
-
-**Seguridad de los datos (respuestas sugeridas, verifíquenlas):**
-- ¿La app recopila datos de los usuarios? **No.** La app solo muestra el catálogo; las consultas se hacen en WhatsApp, que es otra app.
-- ¿Comparte datos con terceros? **No.**
-- ¿Los datos se cifran en tránsito? **Sí** (HTTPS con Supabase).
-
-### 4.3 Generar y subir la app
-
-```bash
-cd mobile
-npx eas-cli@latest login
-npx eas-cli@latest build:configure                       # crea eas.json (solo la primera vez)
-npx eas-cli@latest build -p android --profile production # genera el .aab para Google Play
+```js
+servidor: "https://raicesgt.pages.dev",
 ```
 
-1. En Play Console → **Crear app** → nombre “RaícesGT”, idioma español, app gratuita.
-2. Suban el `.aab` primero a **Prueba interna**, pruébenlo y luego pásenlo a **Producción**. Si la cuenta es personal, antes va la prueba cerrada de 14 días.
-3. Activen **Firma de apps de Google Play** (opción por defecto).
+Así, el botón **Compartir** de la app envía enlaces a la web publicada.
 
-> El nombre del paquete **`com.raicesgt.app`** (en `mobile/app.json`) **no se puede cambiar** después de publicar. Si quieren otro, cámbienlo antes de la primera subida.
+### (Opcional) Dominio propio
 
-Para cada actualización: suban `"version"` en `mobile/app.json` (ej. `1.0.1`) y vuelvan a ejecutar el build. EAS maneja el número interno de versión.
+Si algún día quieren uno, `raicesgt.com` ya está ocupado. Opciones libres al 16/10/2026: `raicesdeguatemala.com`, `tiendaraicesgt.com` y `textilesraicesgt.com`. Se compra en Cloudflare Registrar, se agrega en **Custom domains** del proyecto, y Cloudflare configura los DNS y el HTTPS solo. Luego hay que repetir los pasos de Open Graph con la nueva dirección.
+
+---
+
+## 3. Open Graph: vista previa al compartir, paso a paso
+
+**Qué es:** cuando alguien pega el enlace de la web en WhatsApp, Facebook o Instagram, en lugar de un enlace suelto aparece una **tarjeta con imagen, título y descripción**.
+
+**Lo que ya está hecho:**
+- Todas las páginas públicas tienen las etiquetas `og:*`.
+- La imagen [`frontend/public/img/compartir.jpg`](frontend/public/img/compartir.jpg) (1200×630) ya existe.
+- El script `npm run build:og` genera las etiquetas a partir de `frontend/sitio.json`.
+- Cloudflare ejecuta ese script en cada publicación, porque está dentro de `npm run build`.
+
+**Lo que falta: decirle al sitio cuál es su dirección.** WhatsApp y Facebook necesitan direcciones completas (`https://…`).
+
+### Paso 1. Publicar la web
+Sigue la sección 2 hasta tener `https://raicesgt.pages.dev` funcionando.
+
+### Paso 2. Poner la dirección en `frontend/sitio.json`
+Abre el archivo y llena `"url"`:
+
+```json
+{
+  "nombre": "RaícesGT",
+  "url": "https://raicesgt.pages.dev",
+  ...
+}
+```
+
+Con la dirección puesta, la imagen se sirve desde la propia web. **Ya no hace falta subirla a Supabase.**
+
+### Paso 3. Generar las etiquetas y subir el cambio
+En la terminal:
+
+```bash
+cd frontend
+npm run build:og
+cd ..
+git add frontend
+git commit -m "Open Graph con la dirección publicada"
+git push v2 mejoras-catalogo-y-diseno:main
+```
+
+`npm run build:og` actualiza las 8 páginas: agrega `og:url`, el enlace canónico y la imagen con la dirección completa. Cloudflare publica el cambio en 1–2 minutos.
+
+### Paso 4. Probar
+1. Abre [opengraph.xyz](https://www.opengraph.xyz) o el [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) y pega `https://raicesgt.pages.dev`. Debe aparecer la tarjeta con la imagen.
+2. En **WhatsApp**, envíate el enlace en un chat. WhatsApp guarda las vistas previas un tiempo: si probaste antes del cambio, agrega `?v=2` al final del enlace.
+3. Prueba también `https://raicesgt.pages.dev/productos.html` y `/nosotros.html`. Cada una muestra su propio título y descripción.
+
+### Siguiente mejora (opcional)
+Que al compartir **un producto** aparezca **su propia foto**. WhatsApp no ejecuta JavaScript, así que se necesita una *Pages Function* de Cloudflare (también gratis) que lea el producto de Supabase y escriba sus etiquetas en `producto.html`.
+
+---
+
+## 4. App Android: solo APK (sin Google Play)
+
+### ¿La app se conecta sola?
+**Sí, ya está conectada.** La app lee los productos y las fotos **directo de Supabase** por HTTPS, igual que la web. Lo comprobamos el 16/10/2026: recibe los 42 productos.
+- Funciona con datos móviles o Wi-Fi, desde cualquier lugar. No necesita que la web ni ningún servidor estén encendidos.
+- Lo que se cambie en `admin.html` aparece en la app al abrirla o al **deslizar hacia abajo** en Colección.
+- Sin internet, muestra la copia incluida de los 42 productos.
+- Para comprobarlo: en la pestaña **Contacto**, al final, debe decir **“actualizado desde el servidor”**.
+
+### Generar el APK (gratis)
+1. Crea una cuenta gratis en [expo.dev](https://expo.dev/signup).
+2. En la terminal:
+
+   ```bash
+   cd mobile
+   npx eas-cli@latest login
+   npm run build:apk
+   ```
+
+   La primera vez pregunta si quieres crear el proyecto en Expo: responde **Y**. Si pregunta por la *keystore* (la firma de Android), deja que **EAS la genere**.
+3. Espera a que termine. En el plan gratuito puede tardar desde unos minutos hasta más de una hora en horas pico. Al final verás un **enlace y un código QR** para descargar el `.apk`.
+
+### Instalar el APK en un celular
+1. Abre el enlace o escanea el QR desde el celular Android y descarga el archivo.
+2. Ábrelo. Android pedirá permitir **“Instalar apps de fuentes desconocidas”** para el navegador o el administrador de archivos; actívalo solo para esa instalación.
+3. Si aparece una advertencia de **Play Protect** (“App no verificada”), elige **Más detalles → Instalar de todas formas**. Es normal en apps que no vienen de Google Play.
+
+Para compartirla con el equipo o en la presentación, basta con enviar el enlace de descarga o el archivo `.apk` por WhatsApp o Drive.
+
+### Nueva versión del APK
+Cuando cambien algo **en el código de la app**:
+1. En `mobile/app.json` suban `"version"` (ej. `1.0.1`) y `"versionCode"` (ej. `2`).
+2. Ejecuten de nuevo `npm run build:apk` e instalen el APK nuevo encima del anterior.
+
+> Los cambios de **productos** no necesitan un APK nuevo: llegan solos desde Supabase.
+
+---
 
 ## 5. Orden recomendado
 
-1. Terminar Supabase (SQL, administrador, stock y costo reales).
-2. Subir `compartir.jpg` al bucket `catalogo`.
-3. Comprar el dominio y publicar la web en Cloudflare Pages.
-4. Cambiar el dominio en los 3 lugares de la sección 2 y ejecutar `npm run build:og`.
-5. Probar las vistas previas con el Facebook Sharing Debugger.
-6. Crear la cuenta de Google Play, preparar la ficha (la URL de privacidad ya existe) y subir la app.
-7. Más adelante: `sitemap.xml`, `robots.txt` y Google Search Console.
+1. ✅ Configurar Supabase (SQL, administrador). **Hecho.**
+2. Registrar el stock y el costo reales desde `admin.html`.
+3. Publicar la web en Cloudflare Pages (sección 2).
+4. Activar Open Graph con la dirección publicada (sección 3).
+5. Cambiar `servidor` en `mobile/src/config.js` y generar el APK (sección 4).
+6. Antes de la presentación: abrir la web una vez para confirmar que Supabase no está pausado.
