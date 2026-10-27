@@ -17,7 +17,7 @@
   contenedor.innerHTML = recientes
     .map(
       (p) => `
-      <article class="bg-white border border-border-cool rounded-[22px] overflow-hidden shadow-[0_10px_30px_rgba(30,27,75,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_45px_rgba(30,27,75,0.08)] flex flex-col group">
+      <article class="bg-white border border-border-cool rounded-[22px] overflow-hidden shadow-[0_10px_30px_rgba(60,35,20,0.04)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_45px_rgba(60,35,20,0.08)] flex flex-col group">
         <a href="./producto.html?id=${p.id}" class="block aspect-[4/5] overflow-hidden bg-gradient-to-br from-mesh-blue to-inverse-on-surface">
           <img alt="${escaparHTML(p.nombre)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="${escaparHTML(p.imagen)}" />
         </a>

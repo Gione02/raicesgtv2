@@ -63,7 +63,7 @@ for (const archivo of fs.readdirSync(publico).filter((f) => f.endsWith(".html"))
     `<meta property="og:image:height" content="630" />`,
     `<meta property="og:image:alt" content="${escapar(sitio.nombre)}: textiles típicos de Guatemala" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
-    `<meta name="theme-color" content="#1e1b4b" />`,
+    `<meta name="theme-color" content="#1B2440" />`,
     FIN,
   ]
     .filter(Boolean)

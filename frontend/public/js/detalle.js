@@ -32,7 +32,7 @@
   document.getElementById("ruta-actual").textContent = producto.nombre;
 
   detalle.innerHTML = `
-    <div class="rounded-2xl overflow-hidden bg-surface-container-low border border-border-cool shadow-[0_18px_45px_rgba(30,27,75,0.08)]">
+    <div class="rounded-2xl overflow-hidden bg-surface-container-low border border-border-cool shadow-[0_18px_45px_rgba(60,35,20,0.08)]">
       <img src="${escaparHTML(producto.imagen)}" alt="${escaparHTML(producto.nombre)}" class="w-full aspect-[4/5] object-cover" />
     </div>
     <div class="md:sticky md:top-28">
@@ -100,7 +100,7 @@
     document.getElementById("relacionados").innerHTML = relacionados
       .map(
         (p) => `
-        <a href="./producto.html?id=${p.id}" class="group bg-white rounded-xl border border-border-cool overflow-hidden shadow-[0_8px_30px_rgba(79,70,229,0.08)] hover:-translate-y-1 transition-all duration-300 block">
+        <a href="./producto.html?id=${p.id}" class="group bg-white rounded-xl border border-border-cool overflow-hidden shadow-[0_8px_30px_rgba(110,60,30,0.08)] hover:-translate-y-1 transition-all duration-300 block">
           <div class="aspect-[4/5] overflow-hidden bg-surface-container-low">
             <img src="${escaparHTML(p.imagen)}" alt="${escaparHTML(p.nombre)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
           </div>

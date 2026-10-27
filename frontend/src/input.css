@@ -10,18 +10,18 @@
 }
 
 @layer components {
-  /* Franja de colores inspirada en los tejidos, usada bajo la cabecera */
+  /* Franja de tintes naturales del tejido maya: cochinilla, maíz, jade, añil,
+     achiote y campeche. Va bajo la cabecera y sobre el pie de página. */
   .franja-textil {
     height: 4px;
     background: linear-gradient(
       90deg,
-      #ba1a1a 0%, #ba1a1a 14%,
-      #f59e0b 14%, #f59e0b 28%,
-      #00685f 28%, #00685f 42%,
-      #6cd3f7 42%, #6cd3f7 56%,
-      #4b41e1 56%, #4b41e1 70%,
-      #db2777 70%, #db2777 84%,
-      #f59e0b 84%, #f59e0b 100%
+      #b4452d 0%, #b4452d 16%,
+      #e8a33d 16%, #e8a33d 32%,
+      #2f6b4f 32%, #2f6b4f 48%,
+      #1f3a5f 48%, #1f3a5f 64%,
+      #d9772f 64%, #d9772f 80%,
+      #6b3a5e 80%, #6b3a5e 100%
     );
   }
 

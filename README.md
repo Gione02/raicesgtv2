@@ -40,8 +40,9 @@ Sitio web y app Android de catálogo de textiles guatemaltecos: trajes típicos,
 4. [Cómo hacer cambios](#4-cómo-hacer-cambios)
 5. [Estructura del proyecto](#5-estructura-del-proyecto)
 6. [Panel de administración](#6-panel-de-administración)
-7. [Contenido que el equipo debe revisar](#7-contenido-que-el-equipo-debe-revisar)
-8. [Decisiones del equipo](#8-decisiones-del-equipo)
+7. [Colores y diseño](#7-colores-y-diseño)
+8. [Contenido que el equipo debe revisar](#8-contenido-que-el-equipo-debe-revisar)
+9. [Decisiones del equipo](#9-decisiones-del-equipo)
 
 ---
 
@@ -72,7 +73,7 @@ Sitio web y app Android de catálogo de textiles guatemaltecos: trajes típicos,
 - [ ] **Instalar y probar el APK** en al menos dos celulares Android: Colección, filtros, WhatsApp, Compartir y Sobre nosotros. En la pestaña Contacto debe decir “actualizado desde el servidor”.
 - [ ] **Probar la vista previa al compartir:** pegar `https://raicesgt.pages.dev` en [opengraph.xyz](https://www.opengraph.xyz) y enviarlo por WhatsApp.
 - [ ] **Registrar el stock y el costo reales** de cada producto en `/admin` → Inventario. Hoy todos tienen 1 pieza y no tienen costo.
-- [ ] **Revisar el contenido** de la [sección 7](#7-contenido-que-el-equipo-debe-revisar): descripciones, municipios, textos legales e historia.
+- [ ] **Revisar el contenido** de la [sección 7](#8-contenido-que-el-equipo-debe-revisar): descripciones, municipios, textos legales e historia.
 - [ ] **Antes de cada presentación:** abrir la web o el panel. Supabase gratis **pausa el proyecto tras 1 semana sin uso**; si está pausado, se reactiva en Supabase con **Restore project**.
 
 ### 🟡 Recomendado
@@ -178,7 +179,7 @@ git push v2 mejoras-catalogo-y-diseno:main   # 3. súbelos
    | Catálogo: buscador, filtros, tarjetas | `frontend/public/js/catalogo.js` |
    | Página de un producto | `frontend/public/js/detalle.js` |
    | Panel de administración | `frontend/public/admin.html` y `js/admin.js` |
-   | Colores y tipografías | `frontend/tailwind.config.js` |
+   | Colores y tipografías | `frontend/tailwind.config.js` (ver [sección 7](#7-colores-y-diseño)) |
    | Imagen para compartir (Open Graph) | `frontend/public/img/compartir.jpg` (1200×630) |
    | Título o descripción al compartir una página | `<title>` y `<meta name="description">` de esa página |
 
@@ -312,7 +313,35 @@ Si Supabase no responde, la web usa `frontend/public/js/producto.js` y la app us
 
 ---
 
-## 7. Contenido que el equipo debe revisar
+## 7. Colores y diseño
+
+La paleta se basa en la **psicología del color aplicada al marketing y las ventas**, y en los **tintes naturales del tejido maya**. Así, cada color tiene un motivo comercial y uno cultural.
+
+| Color | Nombre en el código | Dónde se usa | Por qué (psicología y ventas) |
+|---|---|---|---|
+| 🟥 Terracota cochinilla `#B4452D` | `primary` | **Solo** botones y acciones principales | Los tonos cálidos rojo-anaranjados captan la mirada y transmiten energía y urgencia. Usarlo solo en acciones hace que el botón resalte (efecto Von Restorff). Es el rojo de la cochinilla y del traje de Patzún. |
+| 🟦 Añil profundo `#1F3A5F` / `#1B2440` | `secondary` / `deep-indigo` | Cabecera, pie de página, portadas | El azul oscuro es el color más asociado a **confianza y seriedad**: reduce la desconfianza de comprar por internet o WhatsApp. El añil es un tinte tradicional. |
+| 🟨 Maíz dorado `#E8A33D` | `inverse-primary` | “GT” del logo, acentos sobre fondos oscuros | El amarillo cálido transmite **optimismo y novedad** y atrae la atención sin agresividad. |
+| 🟩 Jade `#2F6B4F` | `tertiary` | Etiquetas de categoría, interruptores | El verde evoca **naturaleza, hecho a mano y sostenibilidad**: refuerza la autenticidad. |
+| ⬜ Algodón crudo `#FBF7F1` | `background` | Fondo general | Un fondo cálido se siente **artesanal y acogedor**, y hace que los colores de los textiles destaquen más que sobre un blanco frío. |
+| 🟫 Café oscuro `#2A211B` / `#5C4F45` | `on-surface` / `on-surface-variant` | Textos | Más amable que el negro puro, con contraste alto. |
+| 🟢 Verde WhatsApp `#17834A` | `whatsapp` | Botones de WhatsApp | Se reconoce al instante (confianza por familiaridad). Es más oscuro que el original para que el texto blanco se lea bien. |
+| 🔴 Carmín `#C62828` | `error` | Errores, “Agotado”, eliminar | Distinto de la terracota, para no confundir una acción con un error. |
+
+**Reglas para mantener la paleta:**
+- **60-30-10:** 60 % fondos cálidos, 30 % añil (confianza) y **10 % terracota** (acciones). Si todo es terracota, nada destaca.
+- La terracota es para **lo que queremos que el cliente haga**: Ver colección, Consultar o Guardar. No la usen en textos largos ni en fondos grandes.
+- **Accesibilidad:** todas las combinaciones de texto y fondo cumplen el contraste mínimo WCAG AA (4.5:1). Por ejemplo, el botón terracota con texto blanco da 5.5:1.
+- La **franja textil** (bajo la cabecera y sobre el pie) usa los seis tintes: cochinilla, maíz, jade, añil, achiote y campeche.
+
+**Dónde se cambian los colores:**
+- **Web:** `frontend/tailwind.config.js` (paleta) y `frontend/src/input.css` (franja textil). Después: `npm run publicar`.
+- **App:** `mobile/src/tema.js`. Después: generar un APK nuevo.
+- La imagen para compartir `frontend/public/img/compartir.jpg` y el favicon `frontend/public/img/favicon.svg` usan la misma paleta.
+
+---
+
+## 8. Contenido que el equipo debe revisar
 
 Estos textos y datos se escribieron o corrigieron con la información disponible. **Alguien que conozca los productos debe confirmarlos.**
 
@@ -328,7 +357,7 @@ Estos textos y datos se escribieron o corrigieron con la información disponible
 
 ---
 
-## 8. Decisiones del equipo
+## 9. Decisiones del equipo
 
 Se evaluaron y **no se van a implementar** (octubre de 2026):
 

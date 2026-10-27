@@ -5,59 +5,79 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        outline: "#6e797e",
-        "surface-container": "#eaedff",
-        "on-tertiary-fixed": "#00201d",
-        "on-primary-fixed-variant": "#004e61",
-        "on-error": "#ffffff",
-        "cool-slate": "#f8fafc",
-        "secondary-container": "#645efb",
-        "primary-fixed-dim": "#6cd3f7",
-        "outline-variant": "#bdc8ce",
-        "on-error-container": "#93000a",
-        "on-background": "#131b2e",
-        "surface-tint": "#006780",
-        "border-cool": "#e2e8f0",
-        "on-surface": "#131b2e",
-        "surface-dim": "#d2d9f4",
-        "on-tertiary": "#ffffff",
-        "on-primary-fixed": "#001f28",
-        "on-tertiary-container": "#f4fffc",
-        "secondary-fixed": "#e2dfff",
-        secondary: "#4b41e1",
-        "mesh-blue": "#e0f2fe",
-        "on-surface-variant": "#3e484d",
-        background: "#faf8ff",
-        tertiary: "#00685f",
-        error: "#ba1a1a",
-        "on-primary-container": "#fafdff",
-        "secondary-fixed-dim": "#c3c0ff",
-        "surface-container-low": "#f2f3ff",
-        "deep-indigo": "#1e1b4b",
-        "tertiary-container": "#008378",
-        "on-secondary-fixed": "#0f0069",
-        "primary-fixed": "#b7eaff",
-        "primary-container": "#007f9d",
-        surface: "#faf8ff",
-        "surface-container-lowest": "#ffffff",
-        "on-secondary-fixed-variant": "#3323cc",
-        "cobalt-blur": "rgba(79, 70, 229, 0.08)",
-        "error-container": "#ffdad6",
+        // ==================================================================
+        // PALETA "TINTES NATURALES" — psicología del color aplicada a ventas
+        // Regla 60-30-10: 60 % fondo cálido, 30 % añil (confianza),
+        // 10 % terracota (acciones). Ver README, sección "Colores".
+        // ==================================================================
+
+        // Terracota cochinilla: botones y acciones principales (atención, energía)
+        primary: "#B4452D",
+        "primary-container": "#923521", // hover de botones
         "on-primary": "#ffffff",
-        "surface-container-high": "#e2e7ff",
-        "tertiary-fixed": "#89f5e7",
-        "surface-bright": "#faf8ff",
-        "inverse-on-surface": "#eef0ff",
-        "inverse-primary": "#6cd3f7",
-        primary: "#00647c",
+        "on-primary-container": "#ffffff",
+        "primary-fixed": "#F6D9CF",
+        "primary-fixed-dim": "#E8A99A",
+        "on-primary-fixed": "#3B120A",
+        "on-primary-fixed-variant": "#7A2C1B",
+        "inverse-primary": "#E8A33D", // maíz dorado: acentos sobre fondos oscuros
+        "surface-tint": "#B4452D",
+
+        // Añil: confianza y seriedad (cabecera, pie, enlaces secundarios)
+        secondary: "#1F3A5F",
+        "secondary-container": "#2C4F7E",
         "on-secondary": "#ffffff",
-        "surface-container-highest": "#dae2fd",
-        "on-secondary-container": "#fffbff",
-        "on-tertiary-fixed-variant": "#005049",
-        "inverse-surface": "#283044",
-        "tertiary-fixed-dim": "#6bd8cb",
-        "surface-variant": "#dae2fd",
-        whatsapp: "#25d366",
+        "on-secondary-container": "#ffffff",
+        "secondary-fixed": "#DFE6F0",
+        "secondary-fixed-dim": "#B7C6DB",
+        "on-secondary-fixed": "#0D1B2E",
+        "on-secondary-fixed-variant": "#1F3A5F",
+        "deep-indigo": "#1B2440", // fondo de cabecera y pie
+
+        // Jade: autenticidad, hecho a mano, naturaleza (categorías)
+        tertiary: "#2F6B4F",
+        "tertiary-container": "#3D8463",
+        "on-tertiary": "#ffffff",
+        "on-tertiary-container": "#ffffff",
+        "tertiary-fixed": "#DCEFE3",
+        "tertiary-fixed-dim": "#A9D3BA",
+        "on-tertiary-fixed": "#0F2A1E",
+        "on-tertiary-fixed-variant": "#245540",
+
+        // Algodón crudo: fondos cálidos que resaltan las fotos (60 %)
+        background: "#FBF7F1",
+        surface: "#FBF7F1",
+        "surface-bright": "#FFFDF9",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#F5EEE4",
+        "surface-container": "#EFE6D8",
+        "surface-container-high": "#E9DECD",
+        "surface-container-highest": "#E2D5C1",
+        "surface-dim": "#D9CBB5",
+        "surface-variant": "#EFE6D8",
+        "cool-slate": "#FAF5EE",
+        "mesh-blue": "#FBEBD8", // fondo de etiquetas (crema durazno)
+        "inverse-surface": "#2A211B",
+        "inverse-on-surface": "#F6EEE3",
+
+        // Texto en tonos café cálidos (más amables que el negro puro)
+        "on-background": "#2A211B",
+        "on-surface": "#2A211B",
+        "on-surface-variant": "#5C4F45",
+        outline: "#8A7B6E",
+        "outline-variant": "#D6C8B8",
+        "border-cool": "#E8DDCF",
+
+        // Errores: rojo carmín, distinto de la terracota de los botones
+        error: "#C62828",
+        "on-error": "#ffffff",
+        "error-container": "#FDE2E1",
+        "on-error-container": "#8C1D18",
+
+        // WhatsApp: verde reconocible, más oscuro para que el texto blanco se lea
+        whatsapp: "#17834A",
+
+        "cobalt-blur": "rgba(110, 60, 30, 0.08)",
       },
       borderRadius: {
         DEFAULT: "0.25rem",

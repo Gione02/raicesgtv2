@@ -46,7 +46,7 @@
   if (encabezado) {
     encabezado.className = "sticky top-0 z-50 text-white shadow-lg";
     encabezado.innerHTML = `
-      <div class="bg-gradient-to-r from-deep-indigo via-[#1a2f6b] to-primary">
+      <div class="bg-gradient-to-r from-deep-indigo to-secondary">
         <div class="max-w-[1160px] w-[92%] mx-auto h-[68px] flex items-center justify-between gap-6">
           <a href="./index.html" class="font-black text-xl tracking-tight">
             Raíces<span class="text-inverse-primary">GT</span>

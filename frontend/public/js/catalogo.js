@@ -191,7 +191,7 @@
 
   function tarjetaGrid(producto) {
     return `
-      <article class="bg-white rounded-xl border border-border-cool shadow-[0_8px_30px_rgba(79,70,229,0.08)] hover:shadow-[0_12px_40px_rgba(79,70,229,0.14)] hover:-translate-y-1.5 transition-all duration-300 group overflow-hidden flex flex-col">
+      <article class="bg-white rounded-xl border border-border-cool shadow-[0_8px_30px_rgba(110,60,30,0.08)] hover:shadow-[0_12px_40px_rgba(110,60,30,0.14)] hover:-translate-y-1.5 transition-all duration-300 group overflow-hidden flex flex-col">
         <button type="button" data-id="${producto.id}" class="btn-detalle relative aspect-[4/5] overflow-hidden bg-surface-container-low" aria-label="Ver detalles de ${escaparHTML(producto.nombre)}">
           <img alt="${escaparHTML(producto.nombre)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="${escaparHTML(producto.imagen)}"/>
           <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-primary text-sm font-medium px-3 py-1 rounded-full border border-primary/10">
@@ -213,7 +213,7 @@
 
   function tarjetaLista(producto) {
     return `
-      <article class="bg-white rounded-xl border border-border-cool shadow-[0_4px_20px_rgba(79,70,229,0.06)] hover:shadow-[0_10px_30px_rgba(79,70,229,0.12)] transition-all duration-300 group overflow-hidden flex flex-col sm:flex-row">
+      <article class="bg-white rounded-xl border border-border-cool shadow-[0_4px_20px_rgba(110,60,30,0.06)] hover:shadow-[0_10px_30px_rgba(110,60,30,0.12)] transition-all duration-300 group overflow-hidden flex flex-col sm:flex-row">
         <button type="button" data-id="${producto.id}" class="btn-detalle relative sm:w-56 md:w-64 shrink-0 aspect-[4/3] sm:aspect-auto overflow-hidden bg-surface-container-low" aria-label="Ver detalles de ${escaparHTML(producto.nombre)}">
           <img alt="${escaparHTML(producto.nombre)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="${escaparHTML(producto.imagen)}"/>
         </button>
