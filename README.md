@@ -176,7 +176,8 @@ git push v2 mejoras-catalogo-y-diseno:main   # 3. súbelos
    | Privacidad, Términos, Sostenibilidad | `privacidad.html`, `terminos.html`, `sostenibilidad.html` |
    | Menú, pie de página, botón flotante | `frontend/public/js/layout.js` |
    | WhatsApp, redes sociales, Supabase | `frontend/public/js/config.js` |
-   | Catálogo: buscador, filtros, tarjetas | `frontend/public/js/catalogo.js` |
+   | Catálogo: buscador, filtros, tarjetas, ventana de detalle | `frontend/public/js/catalogo.js` |
+   | Color de cada departamento | `frontend/public/js/departamentos.js` |
    | Página de un producto | `frontend/public/js/detalle.js` |
    | Panel de administración | `frontend/public/admin.html` y `js/admin.js` |
    | Colores y tipografías | `frontend/tailwind.config.js` (ver [sección 7](#7-colores-y-diseño)) |
@@ -320,8 +321,8 @@ La paleta se basa en la **psicología del color aplicada al marketing y las vent
 | Color | Nombre en el código | Dónde se usa | Por qué (psicología y ventas) |
 |---|---|---|---|
 | 🟥 Terracota cochinilla `#B4452D` | `primary` | **Solo** botones y acciones principales | Los tonos cálidos rojo-anaranjados captan la mirada y transmiten energía y urgencia. Usarlo solo en acciones hace que el botón resalte (efecto Von Restorff). Es el rojo de la cochinilla y del traje de Patzún. |
-| 🟦 Añil profundo `#1F3A5F` / `#1B2440` | `secondary` / `deep-indigo` | Cabecera, pie de página, portadas | El azul oscuro es el color más asociado a **confianza y seriedad**: reduce la desconfianza de comprar por internet o WhatsApp. El añil es un tinte tradicional. |
-| 🟨 Maíz dorado `#E8A33D` | `inverse-primary` | “GT” del logo, acentos sobre fondos oscuros | El amarillo cálido transmite **optimismo y novedad** y atrae la atención sin agresividad. |
+| 🟫 Cacao profundo `#5A3526` / `#2B1D17` | `secondary` / `deep-indigo` | Cabecera, pie de página, portadas, enlaces secundarios | El café transmite **tierra, artesanía, solidez y confianza**. Es cálido como la terracota y el crema (armonía análoga), así que la página se ve como una sola pieza. Antes era añil (azul), pero al ser complementario de la terracota hacía que la página se viera partida en dos temperaturas. |
+| 🟨 Maíz dorado `#E8A33D` | `inverse-primary` | “GT” del logo, “tradición” en Nosotros, acentos sobre fondos oscuros | El amarillo cálido transmite **optimismo y novedad** y atrae la atención sin agresividad. |
 | 🟩 Jade `#2F6B4F` | `tertiary` | Etiquetas de categoría, interruptores | El verde evoca **naturaleza, hecho a mano y sostenibilidad**: refuerza la autenticidad. |
 | ⬜ Algodón crudo `#FBF7F1` | `background` | Fondo general | Un fondo cálido se siente **artesanal y acogedor**, y hace que los colores de los textiles destaquen más que sobre un blanco frío. |
 | 🟫 Café oscuro `#2A211B` / `#5C4F45` | `on-surface` / `on-surface-variant` | Textos | Más amable que el negro puro, con contraste alto. |
@@ -329,13 +330,34 @@ La paleta se basa en la **psicología del color aplicada al marketing y las vent
 | 🔴 Carmín `#C62828` | `error` | Errores, “Agotado”, eliminar | Distinto de la terracota, para no confundir una acción con un error. |
 
 **Reglas para mantener la paleta:**
-- **60-30-10:** 60 % fondos cálidos, 30 % añil (confianza) y **10 % terracota** (acciones). Si todo es terracota, nada destaca.
+- **60-30-10:** 60 % fondos cálidos, 30 % cacao (confianza y artesanía) y **10 % terracota** (acciones). Si todo es terracota, nada destaca.
 - La terracota es para **lo que queremos que el cliente haga**: Ver colección, Consultar o Guardar. No la usen en textos largos ni en fondos grandes.
 - **Accesibilidad:** todas las combinaciones de texto y fondo cumplen el contraste mínimo WCAG AA (4.5:1). Por ejemplo, el botón terracota con texto blanco da 5.5:1.
 - La **franja textil** (bajo la cabecera y sobre el pie) usa los seis tintes: cochinilla, maíz, jade, añil, achiote y campeche.
 
+### Color por departamento
+
+Al abrir un producto (ventana de detalle y página `/producto`), la etiqueta, la franja superior, el fondo del panel y el origen toman el **color de su departamento**. Así el cliente asocia cada pieza con su región.
+
+**No existen colores oficiales por departamento:** las banderas departamentales son casi todas blancas con un escudo. Por eso cada color está **inspirado** en lo más reconocible del departamento (su traje, su paisaje o su artesanía), y la ventana muestra esa inspiración. Algunos ejemplos:
+
+| Departamento | Color | Inspiración |
+|---|---|---|
+| Sololá | Azul `#1F6E8C` | Lago de Atitlán y sus cortes azules |
+| Chimaltenango | Rojo `#B3261E` | Huipiles con anchas franjas rojas (Patzún, Comalapa) |
+| Quiché | Magenta `#A3204A` | Huipiles de Nebaj y Chichicastenango |
+| Sacatepéquez | Jade `#2F7D5B` | El jade de La Antigua |
+| Huehuetenango | Vino `#8E2A2A` | Rayado rojo y blanco de Todos Santos Cuchumatán |
+| Guatemala | Azul `#2C5E8A` | Azul del escudo de su bandera |
+
+Los 22 están en **`frontend/public/js/departamentos.js`**, una línea por departamento con su color y su inspiración. Todos tienen contraste de al menos 4.5:1 con texto blanco.
+- **Revisar:** Totonicapán y San Marcos no tienen una fuente confiable.
+- **Revisar:** Chiquimula, Jutiapa, Santa Rosa y Zacapa se basan en el paisaje o la economía de la región, no en su traje.
+
+Si el equipo conoce mejor la identidad de alguno, que lo cambie ahí. Al cambiar un color, conserven el contraste con el texto blanco.
+
 **Dónde se cambian los colores:**
-- **Web:** `frontend/tailwind.config.js` (paleta) y `frontend/src/input.css` (franja textil). Después: `npm run publicar`.
+- **Web:** `frontend/tailwind.config.js` (paleta), `frontend/src/input.css` (franja textil) y `frontend/public/js/departamentos.js` (color por departamento). Después: `npm run publicar`.
 - **App:** `mobile/src/tema.js`. Después: generar un APK nuevo.
 - La imagen para compartir `frontend/public/img/compartir.jpg` y el favicon `frontend/public/img/favicon.svg` usan la misma paleta.
 

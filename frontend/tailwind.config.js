@@ -7,7 +7,7 @@ module.exports = {
       colors: {
         // ==================================================================
         // PALETA "TINTES NATURALES" — psicología del color aplicada a ventas
-        // Regla 60-30-10: 60 % fondo cálido, 30 % añil (confianza),
+        // Regla 60-30-10: 60 % fondo cálido, 30 % cacao (confianza y artesanía),
         // 10 % terracota (acciones). Ver README, sección "Colores".
         // ==================================================================
 
@@ -23,16 +23,17 @@ module.exports = {
         "inverse-primary": "#E8A33D", // maíz dorado: acentos sobre fondos oscuros
         "surface-tint": "#B4452D",
 
-        // Añil: confianza y seriedad (cabecera, pie, enlaces secundarios)
-        secondary: "#1F3A5F",
-        "secondary-container": "#2C4F7E",
+        // Cacao: tierra, artesanía y confianza (cabecera, pie, enlaces secundarios).
+        // Es cálido como la terracota y el crema: armonía análoga, la página se ve como una sola pieza.
+        secondary: "#5A3526",
+        "secondary-container": "#6E4431",
         "on-secondary": "#ffffff",
         "on-secondary-container": "#ffffff",
-        "secondary-fixed": "#DFE6F0",
-        "secondary-fixed-dim": "#B7C6DB",
-        "on-secondary-fixed": "#0D1B2E",
-        "on-secondary-fixed-variant": "#1F3A5F",
-        "deep-indigo": "#1B2440", // fondo de cabecera y pie
+        "secondary-fixed": "#F1E4DA",
+        "secondary-fixed-dim": "#DCC3B2",
+        "on-secondary-fixed": "#24150F",
+        "on-secondary-fixed-variant": "#5A3526",
+        "deep-indigo": "#2B1D17", // fondo de cabecera y pie (cacao oscuro; se conserva el nombre para no tocar el HTML)
 
         // Jade: autenticidad, hecho a mano, naturaleza (categorías)
         tertiary: "#2F6B4F",

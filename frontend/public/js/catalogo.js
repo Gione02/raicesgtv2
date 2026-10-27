@@ -24,6 +24,7 @@
 
   const ICONO_FLECHA = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
   const ICONO_UBICACION = `<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>`;
+  const ICONO_WHATSAPP = `<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>`;
   const ICONO_CERRAR = `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>`;
 
   // ---------------- Utilidades ----------------
@@ -177,6 +178,14 @@
   });
 
   // ---------------- Tarjetas ----------------
+  // Toda la tarjeta abre el detalle; "Consúltanos" abre WhatsApp directamente.
+  function botonConsultar(producto) {
+    return `
+      <button type="button" data-consultar="${producto.id}" class="inline-flex items-center gap-1.5 font-bold text-primary hover:text-primary-container transition-colors" aria-label="Consultar ${escaparHTML(producto.nombre)} por WhatsApp">
+        ${ICONO_WHATSAPP}<span>Consúltanos</span>
+      </button>`;
+  }
+
   function botonDetalles(producto) {
     return `
       <button type="button" data-id="${producto.id}" class="btn-detalle inline-flex items-center gap-1 text-secondary hover:text-primary font-semibold transition-colors">
@@ -191,7 +200,7 @@
 
   function tarjetaGrid(producto) {
     return `
-      <article class="bg-white rounded-xl border border-border-cool shadow-[0_8px_30px_rgba(110,60,30,0.08)] hover:shadow-[0_12px_40px_rgba(110,60,30,0.14)] hover:-translate-y-1.5 transition-all duration-300 group overflow-hidden flex flex-col">
+      <article data-id="${producto.id}" class="cursor-pointer bg-white rounded-xl border border-border-cool shadow-[0_8px_30px_rgba(110,60,30,0.08)] hover:shadow-[0_12px_40px_rgba(110,60,30,0.14)] hover:-translate-y-1.5 transition-all duration-300 group overflow-hidden flex flex-col">
         <button type="button" data-id="${producto.id}" class="btn-detalle relative aspect-[4/5] overflow-hidden bg-surface-container-low" aria-label="Ver detalles de ${escaparHTML(producto.nombre)}">
           <img alt="${escaparHTML(producto.nombre)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="${escaparHTML(producto.imagen)}"/>
           <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-primary text-sm font-medium px-3 py-1 rounded-full border border-primary/10">
@@ -204,7 +213,7 @@
           <p class="flex items-center gap-1 text-sm text-on-surface-variant mb-3">${ICONO_UBICACION}${escaparHTML(producto.municipio)}</p>
           <p class="text-on-surface-variant mb-6 line-clamp-2">${escaparHTML(producto.descripcion)}</p>
           <div class="mt-auto pt-4 border-t border-border-cool flex justify-between items-center">
-            <span class="font-semibold text-primary">Consúltanos</span>
+            ${botonConsultar(producto)}
             ${botonDetalles(producto)}
           </div>
         </div>
@@ -213,7 +222,7 @@
 
   function tarjetaLista(producto) {
     return `
-      <article class="bg-white rounded-xl border border-border-cool shadow-[0_4px_20px_rgba(110,60,30,0.06)] hover:shadow-[0_10px_30px_rgba(110,60,30,0.12)] transition-all duration-300 group overflow-hidden flex flex-col sm:flex-row">
+      <article data-id="${producto.id}" class="cursor-pointer bg-white rounded-xl border border-border-cool shadow-[0_4px_20px_rgba(110,60,30,0.06)] hover:shadow-[0_10px_30px_rgba(110,60,30,0.12)] transition-all duration-300 group overflow-hidden flex flex-col sm:flex-row">
         <button type="button" data-id="${producto.id}" class="btn-detalle relative sm:w-56 md:w-64 shrink-0 aspect-[4/3] sm:aspect-auto overflow-hidden bg-surface-container-low" aria-label="Ver detalles de ${escaparHTML(producto.nombre)}">
           <img alt="${escaparHTML(producto.nombre)}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" src="${escaparHTML(producto.imagen)}"/>
         </button>
@@ -228,7 +237,7 @@
             <p class="text-on-surface-variant line-clamp-2">${escaparHTML(producto.descripcion)}</p>
           </div>
           <div class="flex sm:flex-col items-center sm:items-end justify-between gap-3 shrink-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-border-cool">
-            <span class="font-semibold text-primary">Consúltanos</span>
+            ${botonConsultar(producto)}
             ${botonDetalles(producto)}
           </div>
         </div>
@@ -294,17 +303,42 @@
   const cajaModal = modal.querySelector(".transform");
   let productoAbierto = null;
 
+  // Aplica un cambio solo si el elemento existe (si falta uno, el modal igual abre)
+  function enElemento(id, cambio) {
+    const el = document.getElementById(id);
+    if (el) cambio(el);
+  }
+
   function abrirModal(producto) {
     productoAbierto = producto;
-    document.getElementById("modal-title").textContent = producto.nombre;
-    document.getElementById("modal-img").src = producto.imagen;
-    document.getElementById("modal-img").alt = producto.nombre;
-    document.getElementById("modal-desc").textContent = producto.descripcion;
-    document.getElementById("modal-status").textContent = producto.departamento;
-    document.getElementById("modal-categoria").textContent = producto.categoria;
-    document.getElementById("modal-municipio").textContent = `${producto.municipio}, ${producto.departamento}`;
-    document.getElementById("modal-color").textContent = producto.color;
-    document.getElementById("modal-enlace").href = `./producto.html?id=${producto.id}`;
+    const depto = colorDepartamento(producto.departamento); // js/departamentos.js
+
+    enElemento("modal-title", (el) => (el.textContent = producto.nombre));
+    enElemento("modal-img", (el) => {
+      el.src = producto.imagen;
+      el.alt = producto.nombre;
+    });
+    enElemento("modal-desc", (el) => (el.textContent = producto.descripcion));
+    enElemento("modal-categoria", (el) => (el.textContent = producto.categoria));
+    enElemento("modal-color", (el) => (el.textContent = producto.color));
+    enElemento("modal-enlace", (el) => {
+      el.href = `./producto.html?id=${producto.id}`;
+      el.style.color = depto.color;
+      el.style.borderColor = depto.borde;
+    });
+
+    // Color del departamento: etiqueta, franja superior, fondo suave y origen
+    enElemento("modal-status", (el) => {
+      el.textContent = producto.departamento;
+      el.style.backgroundColor = depto.color;
+    });
+    enElemento("modal-banda", (el) => (el.style.backgroundColor = depto.color));
+    enElemento("modal-panel", (el) => (el.style.background = `linear-gradient(180deg, ${depto.suave} 0%, #ffffff 55%)`));
+    enElemento("modal-municipio", (el) => {
+      el.textContent = `${producto.municipio}, ${producto.departamento}`;
+      el.style.color = depto.color;
+    });
+    enElemento("modal-inspiracion", (el) => (el.textContent = depto.inspiracion));
 
     modal.classList.remove("hidden");
     setTimeout(() => {
@@ -333,10 +367,17 @@
     if (productoAbierto) consultar(`${productoAbierto.nombre} (${productoAbierto.color}, código ${productoAbierto.id})`);
   });
 
+  // Clic en una tarjeta: "Consúltanos" abre WhatsApp; cualquier otra parte abre el detalle
   contenedor.addEventListener("click", (e) => {
-    const boton = e.target.closest(".btn-detalle");
-    if (!boton) return;
-    const producto = productos.find((p) => p.id === Number(boton.dataset.id));
+    const consulta = e.target.closest("[data-consultar]");
+    if (consulta) {
+      const p = productos.find((x) => x.id === Number(consulta.dataset.consultar));
+      if (p) consultar(`${p.nombre} (${p.color}, código ${p.id})`);
+      return;
+    }
+    const tarjeta = e.target.closest("[data-id]");
+    if (!tarjeta) return;
+    const producto = productos.find((p) => p.id === Number(tarjeta.dataset.id));
     if (producto) abrirModal(producto);
   });
 

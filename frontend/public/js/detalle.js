@@ -31,21 +31,24 @@
   document.querySelector('meta[name="description"]').setAttribute("content", producto.descripcion);
   document.getElementById("ruta-actual").textContent = producto.nombre;
 
+  // Color del departamento (js/departamentos.js): marco de la foto, etiqueta y origen
+  const depto = colorDepartamento(producto.departamento);
+
   detalle.innerHTML = `
-    <div class="rounded-2xl overflow-hidden bg-surface-container-low border border-border-cool shadow-[0_18px_45px_rgba(60,35,20,0.08)]">
+    <div style="border-top-color: ${depto.color}" class="rounded-2xl overflow-hidden bg-surface-container-low border-t-8 border border-border-cool shadow-[0_18px_45px_rgba(60,35,20,0.08)]">
       <img src="${escaparHTML(producto.imagen)}" alt="${escaparHTML(producto.nombre)}" class="w-full aspect-[4/5] object-cover" />
     </div>
     <div class="md:sticky md:top-28">
       <div class="flex flex-wrap gap-2 mb-4">
         <a href="./productos.html?categoria=${encodeURIComponent(producto.categoria)}" class="text-xs font-semibold uppercase tracking-wide text-tertiary bg-tertiary-fixed/40 px-2.5 py-1 rounded-full hover:bg-tertiary-fixed">${escaparHTML(producto.categoria)}</a>
-        <a href="./productos.html?departamento=${encodeURIComponent(producto.departamento)}" class="text-xs font-semibold text-primary bg-mesh-blue px-2.5 py-1 rounded-full hover:bg-primary-fixed">${escaparHTML(producto.departamento)}</a>
+        <a href="./productos.html?departamento=${encodeURIComponent(producto.departamento)}" style="background-color: ${depto.color}" class="text-xs font-bold text-white px-2.5 py-1 rounded-full hover:opacity-90">${escaparHTML(producto.departamento)}</a>
       </div>
       <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">${escaparHTML(producto.nombre)}</h1>
       <p class="text-lg text-on-surface-variant mb-8">${escaparHTML(producto.descripcion)}</p>
 
       <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 py-6 border-y border-border-cool mb-8">
         <dt class="font-semibold">Origen</dt>
-        <dd class="text-on-surface-variant">${escaparHTML(producto.municipio)}, ${escaparHTML(producto.departamento)}</dd>
+        <dd class="text-on-surface-variant"><span class="font-semibold" style="color: ${depto.color}">${escaparHTML(producto.municipio)}, ${escaparHTML(producto.departamento)}</span>${depto.inspiracion ? `<span class="block text-xs mt-0.5 opacity-80">${escaparHTML(depto.inspiracion)}</span>` : ""}</dd>
         <dt class="font-semibold">Color</dt>
         <dd class="text-on-surface-variant">${escaparHTML(producto.color)}</dd>
         <dt class="font-semibold">Código</dt>

@@ -21,7 +21,7 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="RaícesGT: textiles típicos de Guatemala" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#1B2440" />
+    <meta name="theme-color" content="#2B1D17" />
     <!-- /open-graph -->
     <link rel="icon" href="./img/favicon.svg" type="image/svg+xml" />
     <link href="https://fonts.googleapis.com" rel="preconnect" />
@@ -139,12 +139,15 @@
       >
         <div class="md:w-1/2 h-72 md:h-auto relative bg-surface-container-low">
           <img alt="" class="w-full h-full object-cover" id="modal-img" src="" />
+          <!-- Etiqueta del departamento: toma el color del departamento (js/departamentos.js) -->
           <div
-            class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-primary text-sm font-semibold px-3 py-1 rounded-full border border-primary/10"
+            class="absolute top-4 left-4 text-white text-sm font-bold px-3 py-1 rounded-full shadow-md"
             id="modal-status"
           ></div>
         </div>
-        <div class="md:w-1/2 p-6 md:p-10 flex flex-col relative">
+        <!-- Panel de datos: franja superior y fondo suave con el color del departamento -->
+        <div class="md:w-1/2 p-6 md:p-10 pt-8 md:pt-12 flex flex-col relative transition-colors duration-300" id="modal-panel">
+          <div class="absolute top-0 left-0 right-0 h-2" id="modal-banda"></div>
           <button
             type="button"
             aria-label="Cerrar"
@@ -158,7 +161,10 @@
           <p class="text-on-surface-variant mb-6" id="modal-desc"></p>
           <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm mb-8">
             <dt class="font-semibold text-on-surface">Origen</dt>
-            <dd class="text-on-surface-variant" id="modal-municipio"></dd>
+            <dd class="text-on-surface-variant">
+              <span class="inline-flex items-center gap-1.5 font-semibold" id="modal-municipio"></span>
+              <span class="block text-xs mt-0.5 opacity-80" id="modal-inspiracion"></span>
+            </dd>
             <dt class="font-semibold text-on-surface">Color</dt>
             <dd class="text-on-surface-variant" id="modal-color"></dd>
             <dt class="font-semibold text-on-surface">Precio</dt>
@@ -173,6 +179,12 @@
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>
               Consultar por WhatsApp
             </button>
+            <a
+              id="modal-enlace"
+              href="./productos.html"
+              class="flex items-center justify-center gap-1 w-full px-6 py-3 rounded-full border-2 font-bold transition-colors"
+              >Ver página del producto →</a
+            >
           </div>
         </div>
       </div>
@@ -182,6 +194,7 @@
     <script src="./js/layout.js"></script>
     <script src="./js/producto.js"></script>
     <script src="./js/datos.js"></script>
+    <script src="./js/departamentos.js"></script>
     <script src="./js/catalogo.js"></script>
   </body>
 </html>
