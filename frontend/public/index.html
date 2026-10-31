@@ -64,9 +64,7 @@
           <p
             class="my-6 md:mb-[30px] max-w-[600px] text-on-surface-variant text-[1.08rem]"
           >
-            Descubre trajes típicos llenos de color, diseño y significado.
-            Piezas seleccionadas para conservar la esencia de nuestras
-            tradiciones y llevarlas contigo.
+            Trajes típicos llenos de color y significado.
           </p>
           <div class="flex flex-wrap gap-3">
             <a
@@ -117,10 +115,6 @@
                 Agregados recientemente
               </h2>
             </div>
-            <p class="max-w-[500px] text-on-surface-variant mt-3.5 sm:mt-0">
-              Conoce las piezas que acabamos de incorporar al catálogo. Cada
-              diseño destaca por sus colores, tejidos y detalles.
-            </p>
           </div>
           <!-- Se llena con los últimos productos de Supabase (ver js/inicio.js) -->
           <div id="recientes" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[22px]"></div>
@@ -132,63 +126,38 @@
           </div>
         </div>
       </section>
-      <section class="py-[65px] md:py-[90px]" id="historia">
-        <div
-          class="max-w-[1160px] w-[92%] mx-auto grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 md:gap-[70px] items-start md:items-center"
-        >
+      <!-- Compra por región: foto de cada departamento (js/departamentos.js) -->
+      <section class="py-[65px] md:py-[90px]" id="regiones">
+        <div class="max-w-[1160px] w-[92%] mx-auto">
+          <div class="flex flex-wrap items-end justify-between gap-4 mb-[34px]">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-mesh-blue text-primary font-black text-[0.82rem] mb-4">
+                COMPRA POR REGIÓN
+              </div>
+              <h2 class="text-[clamp(2rem,4vw,3.25rem)] leading-none tracking-[-0.045em] font-bold">¿De dónde lo quieres?</h2>
+            </div>
+            <a href="./nosotros.html#departamentos" class="font-bold text-secondary hover:text-primary">Ver todas las regiones →</a>
+          </div>
+          <div id="regiones-inicio" class="grid grid-cols-2 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[260px] gap-3 md:gap-4"></div>
+          <p class="mt-4 text-xs text-on-surface-variant/80">Fotos de paisajes: Wikimedia Commons (<a href="./nosotros.html#creditos-fotos" class="underline">créditos</a>).</p>
+        </div>
+      </section>
+      <!-- Nuestra esencia: una frase y fotos -->
+      <section class="bg-deep-indigo text-white py-[65px] md:py-[90px]" id="historia">
+        <div class="max-w-[1160px] w-[92%] mx-auto grid grid-cols-1 md:grid-cols-[0.9fr_1.1fr] gap-10 md:gap-[70px] items-center">
           <div>
-            <div
-              class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-mesh-blue text-primary font-black text-[0.82rem] mb-4"
-            >
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 font-black text-[0.82rem] mb-4">
               NUESTRA ESENCIA
             </div>
-            <h2
-              class="text-[clamp(2rem,4vw,3.5rem)] leading-[1.03] tracking-[-0.05em] font-bold mb-5"
-            >
+            <h2 class="text-[clamp(2rem,4vw,3.5rem)] leading-[1.03] tracking-[-0.05em] font-bold mb-6">
               Más que una prenda, una historia que continúa.
             </h2>
-            <p class="text-on-surface-variant mb-4.5">
-              Nuestra colección busca acercar los textiles tradicionales
-              guatemaltecos a nuevas generaciones, resaltando sus colores,
-              diseños y el trabajo detrás de cada pieza.
-            </p>
-            <p class="text-on-surface-variant">
-              Seleccionamos cada traje pensando en su presentación, calidad y
-              autenticidad, para que puedas conocerlo y comprarlo desde
-              cualquier lugar.
-            </p>
+            <a href="./nosotros.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-secondary font-bold hover:bg-mesh-blue transition">Conoce nuestra historia</a>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-[25px]">
-            <div class="p-4 rounded-2xl bg-white border border-border-cool">
-              <strong class="block text-secondary mb-1"
-                >Diseños tradicionales</strong
-              >
-              <span class="text-[0.88rem] text-on-surface-variant"
-                >Inspirados en la riqueza textil de Guatemala.</span
-              >
-            </div>
-            <div class="p-4 rounded-2xl bg-white border border-border-cool">
-              <strong class="block text-secondary mb-1"
-                >Colores vibrantes</strong
-              >
-              <span class="text-[0.88rem] text-on-surface-variant"
-                >Una identidad visual que destaca a primera vista.</span
-              >
-            </div>
-            <div class="p-4 rounded-2xl bg-white border border-border-cool">
-              <strong class="block text-secondary mb-1"
-                >Detalles textiles</strong
-              >
-              <span class="text-[0.88rem] text-on-surface-variant"
-                >Información clara sobre cada pieza y sus características.</span
-              >
-            </div>
-            <div class="p-4 rounded-2xl bg-white border border-border-cool">
-              <strong class="block text-secondary mb-1">Compra sencilla</strong>
-              <span class="text-[0.88rem] text-on-surface-variant"
-                >Consulta disponibilidad y coordina tu entrega.</span
-              >
-            </div>
+          <div class="grid grid-cols-2 auto-rows-[150px] md:auto-rows-[190px] gap-3">
+            <img src="./img/traje-17.jpeg" alt="Traje de gala de Sololá" loading="lazy" class="row-span-2 w-full h-full object-cover rounded-2xl" />
+            <img src="./img/traje-24.png" alt="Huipil bordado de Nebaj" loading="lazy" class="w-full h-full object-cover rounded-2xl bg-white" />
+            <img src="./img/traje-29.jpeg" alt="Traje de Totonicapán" loading="lazy" class="w-full h-full object-cover rounded-2xl" />
           </div>
         </div>
       </section>
@@ -212,10 +181,6 @@
                 Recíbelo donde estés.
               </h2>
             </div>
-            <p class="max-w-[500px] text-on-surface-variant mt-3.5 sm:mt-0">
-              Información sencilla para que el proceso de compra sea claro desde
-              el primer contacto.
-            </p>
           </div>
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[18px]"
@@ -228,8 +193,7 @@
               </div>
               <h3 class="font-bold mb-1.5">Envíos nacionales</h3>
               <p class="text-on-surface-variant text-[0.92rem]">
-                Realizamos envíos a diferentes departamentos de Guatemala. El
-                costo depende del destino.
+                A toda Guatemala.
               </p>
             </div>
             <div
@@ -240,8 +204,7 @@
               </div>
               <h3 class="font-bold mb-1.5">Entrega segura</h3>
               <p class="text-on-surface-variant text-[0.92rem]">
-                Coordinamos la entrega y compartimos los detalles necesarios
-                para dar seguimiento al pedido.
+                Con seguimiento de tu pedido.
               </p>
             </div>
             <div
@@ -252,8 +215,7 @@
               </div>
               <h3 class="font-bold mb-1.5">Atención directa</h3>
               <p class="text-on-surface-variant text-[0.92rem]">
-                Consulta medidas, disponibilidad, precio y opciones de envío
-                antes de realizar tu pedido.
+                Te respondemos por WhatsApp.
               </p>
             </div>
           </div>
@@ -266,6 +228,7 @@
     <script src="./js/layout.js"></script>
     <script src="./js/producto.js"></script>
     <script src="./js/datos.js"></script>
+    <script src="./js/departamentos.js"></script>
     <script src="./js/inicio.js"></script>
   </body>
 </html>

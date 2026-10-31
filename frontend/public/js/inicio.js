@@ -26,10 +26,9 @@
             <span class="inline-block px-2.5 py-1 rounded-full bg-mesh-blue text-primary text-[0.75rem] font-black">Recién agregado</span>
             <span class="inline-block px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant text-[0.75rem] font-semibold">${escaparHTML(p.departamento)}</span>
           </div>
-          <h3 class="text-[1.22rem] font-bold mb-1.5">
+          <h3 class="text-[1.22rem] font-bold mb-4">
             <a href="./producto.html?id=${p.id}" class="hover:text-primary">${escaparHTML(p.nombre)}</a>
           </h3>
-          <p class="text-on-surface-variant text-[0.91rem] mb-4 line-clamp-2">${escaparHTML(p.descripcion)}</p>
           <div class="mt-auto flex justify-between items-center gap-2.5">
             <a href="./producto.html?id=${p.id}" class="font-bold text-secondary hover:text-primary">Ver detalles</a>
             <button type="button" data-consultar="${p.id}" class="bg-inverse-on-surface text-secondary px-3.5 py-2 rounded-[10px] font-black hover:bg-secondary-fixed">
@@ -40,6 +39,10 @@
       </article>`
     )
     .join("");
+
+  // Compra por región: las 4 regiones con más piezas
+  const regiones = document.getElementById("regiones-inicio");
+  if (regiones) regiones.innerHTML = tarjetasDepartamentos(productos, { limite: 4 });
 
   contenedor.addEventListener("click", (e) => {
     const boton = e.target.closest("[data-consultar]");

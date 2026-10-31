@@ -210,8 +210,7 @@
         <div class="p-6 flex-grow flex flex-col">
           <div class="mb-3">${etiquetaCategoria(producto)}</div>
           <h3 class="text-xl leading-tight font-bold text-on-surface mb-2">${escaparHTML(producto.nombre)}</h3>
-          <p class="flex items-center gap-1 text-sm text-on-surface-variant mb-3">${ICONO_UBICACION}${escaparHTML(producto.municipio)}</p>
-          <p class="text-on-surface-variant mb-6 line-clamp-2">${escaparHTML(producto.descripcion)}</p>
+          <p class="flex items-center gap-1 text-sm text-on-surface-variant mb-5">${ICONO_UBICACION}${escaparHTML(producto.municipio)}</p>
           <div class="mt-auto pt-4 border-t border-border-cool flex justify-between items-center">
             ${botonConsultar(producto)}
             ${botonDetalles(producto)}

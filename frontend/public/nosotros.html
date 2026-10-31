@@ -30,143 +30,161 @@
     <header id="encabezado" class="sticky top-0 z-50 h-[72px] bg-deep-indigo"></header>
 
     <main class="flex-grow">
-      <!-- Portada -->
+      <!-- Portada: frase corta + collage de fotos -->
       <section class="relative overflow-hidden bg-gradient-to-br from-deep-indigo to-secondary text-white">
-        <div class="max-w-[1160px] w-[92%] mx-auto py-16 md:py-24 grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] gap-10 items-center">
+        <div class="max-w-[1160px] w-[92%] mx-auto py-14 md:py-20 grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-10 items-center">
           <div>
             <span class="inline-flex px-3.5 py-1.5 rounded-full bg-white/15 font-black text-[0.82rem] mb-4">SOBRE NOSOTROS</span>
             <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05] mb-5">
               Tejemos puentes entre la <span class="text-inverse-primary">tradición</span> y quienes la llevan puesta.
             </h1>
-            <!-- EQUIPO: este párrafo puede reemplazarse por cómo y cuándo nació RaícesGT -->
-            <p class="text-lg text-white/85 max-w-xl">
-              En RaícesGT acercamos los textiles tradicionales guatemaltecos a nuevas generaciones, resaltando sus colores,
-              sus diseños y el trabajo que hay detrás de cada pieza.
-            </p>
+            <p class="text-xl text-white/80">Textiles guatemaltecos, con su historia.</p>
           </div>
-          <div class="grid grid-cols-2 gap-3">
-            <img src="./img/traje-24.png" alt="Huipil bordado de Nebaj" class="w-full aspect-[3/4] object-cover rounded-2xl shadow-2xl rotate-[-2deg]" />
-            <img src="./img/santiago.jpeg" alt="Huipil de Santiago Atitlán" class="w-full aspect-[3/4] object-cover rounded-2xl shadow-2xl translate-y-6 rotate-[2deg]" />
+          <div class="grid grid-cols-3 gap-3 h-[340px] md:h-[420px]">
+            <img src="./img/traje-24.png" alt="Huipil bordado de Nebaj" class="col-span-2 row-span-2 w-full h-full object-cover rounded-2xl shadow-2xl" />
+            <img src="./img/santiago.jpeg" alt="Huipil de Santiago Atitlán" class="w-full h-full object-cover rounded-2xl shadow-2xl" />
+            <img src="./img/patzun.png" alt="Traje típico de Patzún" class="w-full h-full object-cover rounded-2xl shadow-2xl bg-white" />
           </div>
         </div>
         <div class="franja-textil"></div>
       </section>
 
-      <!-- Nuestra historia -->
-      <section class="max-w-[1160px] w-[92%] mx-auto py-16 md:py-20 grid grid-cols-1 md:grid-cols-[0.8fr_1.2fr] gap-10">
-        <div>
-          <span class="inline-flex px-3.5 py-1.5 rounded-full bg-mesh-blue text-primary font-black text-[0.82rem] mb-4">NUESTRA HISTORIA</span>
-          <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Más que una prenda, una historia que continúa.</h2>
-        </div>
-        <!-- EQUIPO: cuenten aquí su historia real (quiénes son, desde cuándo, por qué empezaron) -->
-        <div class="space-y-4 text-on-surface-variant text-lg leading-relaxed">
-          <p>
-            Cada traje guatemalteco guarda conocimientos que pasan de generación en generación: técnicas, símbolos y colores
-            que identifican a cada pueblo. Queremos que ese conocimiento siga vivo y que más personas puedan conocerlo y
-            llevarlo con orgullo.
-          </p>
-          <p>
-            Por eso seleccionamos cada pieza pensando en su calidad y autenticidad, la presentamos con información clara sobre
-            su origen y te atendemos de forma directa para que encuentres la prenda ideal desde cualquier lugar.
-          </p>
+      <!-- Cifras (se calculan con el catálogo real) -->
+      <section class="max-w-[1160px] w-[92%] mx-auto -mt-px py-10 md:py-12">
+        <div class="grid grid-cols-3 gap-3 md:gap-5 text-center">
+          <div class="rounded-2xl bg-white border border-border-cool py-6 md:py-8">
+            <p id="cifra-piezas" class="text-4xl md:text-6xl font-black text-primary">–</p>
+            <p class="mt-1 text-xs sm:text-base font-semibold text-on-surface-variant">piezas</p>
+          </div>
+          <div class="rounded-2xl bg-white border border-border-cool py-6 md:py-8">
+            <p id="cifra-municipios" class="text-4xl md:text-6xl font-black text-secondary">–</p>
+            <p class="mt-1 text-xs sm:text-base font-semibold text-on-surface-variant">municipios</p>
+          </div>
+          <div class="rounded-2xl bg-white border border-border-cool py-6 md:py-8">
+            <p id="cifra-departamentos" class="text-4xl md:text-6xl font-black text-tertiary">–</p>
+            <p class="mt-1 text-xs sm:text-base font-semibold text-on-surface-variant">departamentos</p>
+          </div>
         </div>
       </section>
 
-      <!-- Valores -->
-      <section class="bg-gradient-to-b from-white to-cool-slate border-y border-border-cool py-16 md:py-20">
+      <!-- Nuestra historia: mosaico de fotos con una sola frase -->
+      <!-- EQUIPO: la frase puede cambiarse por cómo y cuándo nació RaícesGT -->
+      <section class="max-w-[1160px] w-[92%] mx-auto pb-16 md:pb-20">
+        <div class="grid grid-cols-2 md:grid-cols-4 auto-rows-[160px] md:auto-rows-[200px] gap-3">
+          <div class="col-span-2 row-span-2 relative overflow-hidden rounded-3xl">
+            <img src="./img/traje-17.jpeg" alt="Traje de gala de Sololá" class="absolute inset-0 w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-deep-indigo/90 via-deep-indigo/30 to-transparent"></div>
+            <div class="absolute bottom-0 p-6 md:p-8 text-white">
+              <span class="inline-flex px-3 py-1 rounded-full bg-white/15 font-black text-xs mb-3">NUESTRA HISTORIA</span>
+              <h2 class="text-3xl md:text-4xl font-bold tracking-tight leading-tight">Cada traje cuenta la historia de su pueblo.</h2>
+            </div>
+          </div>
+          <img src="./img/traje-23.png" alt="Huipil de Sacatepéquez" class="w-full h-full object-cover rounded-3xl bg-white" />
+          <img src="./img/traje-10.jpeg" alt="Traje de Quiché" class="w-full h-full object-cover rounded-3xl" />
+          <img src="./img/traje-29.jpeg" alt="Traje de Totonicapán" class="col-span-2 w-full h-full object-cover rounded-3xl" />
+        </div>
+      </section>
+
+      <!-- Valores: solo ícono y título -->
+      <section class="bg-gradient-to-b from-white to-cool-slate border-y border-border-cool py-14 md:py-16">
         <div class="max-w-[1160px] w-[92%] mx-auto">
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-10 text-center">Lo que nos mueve</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <article class="bg-white rounded-2xl border border-border-cool p-6">
-              <div class="w-12 h-12 rounded-xl bg-mesh-blue text-primary flex items-center justify-center mb-4">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            <div class="flex flex-col items-center text-center gap-3">
+              <div class="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center shadow-lg">
+                <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
               </div>
-              <h3 class="font-bold text-lg mb-1.5">Origen claro</h3>
-              <p class="text-sm text-on-surface-variant">Cada pieza muestra su municipio y departamento, para reconocer a las comunidades detrás de ella.</p>
-            </article>
-            <article class="bg-white rounded-2xl border border-border-cool p-6">
-              <div class="w-12 h-12 rounded-xl bg-tertiary-fixed/50 text-tertiary flex items-center justify-center mb-4">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+              <h3 class="font-bold text-lg">Origen claro</h3>
+            </div>
+            <div class="flex flex-col items-center text-center gap-3">
+              <div class="w-20 h-20 rounded-full bg-secondary text-white flex items-center justify-center shadow-lg">
+                <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>
               </div>
-              <h3 class="font-bold text-lg mb-1.5">Trabajo artesanal valorado</h3>
-              <p class="text-sm text-on-surface-variant">Un bordado a mano puede llevar semanas de trabajo. Lo presentamos con el respeto que merece.</p>
-            </article>
-            <article class="bg-white rounded-2xl border border-border-cool p-6">
-              <div class="w-12 h-12 rounded-xl bg-secondary-fixed text-secondary flex items-center justify-center mb-4">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
+              <h3 class="font-bold text-lg">Hecho por artesanas</h3>
+            </div>
+            <div class="flex flex-col items-center text-center gap-3">
+              <div class="w-20 h-20 rounded-full bg-tertiary text-white flex items-center justify-center shadow-lg">
+                <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
               </div>
-              <h3 class="font-bold text-lg mb-1.5">Piezas seleccionadas</h3>
-              <p class="text-sm text-on-surface-variant">Elegimos cada traje por su calidad, sus detalles y su autenticidad.</p>
-            </article>
-            <article class="bg-white rounded-2xl border border-border-cool p-6">
-              <div class="w-12 h-12 rounded-xl bg-tertiary-fixed text-whatsapp flex items-center justify-center mb-4">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>
+              <h3 class="font-bold text-lg">Piezas auténticas</h3>
+            </div>
+            <div class="flex flex-col items-center text-center gap-3">
+              <div class="w-20 h-20 rounded-full bg-whatsapp text-white flex items-center justify-center shadow-lg">
+                <svg class="w-9 h-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>
               </div>
-              <h3 class="font-bold text-lg mb-1.5">Atención cercana</h3>
-              <p class="text-sm text-on-surface-variant">Te asesoramos por WhatsApp con medidas, disponibilidad y envíos antes de tu compra.</p>
-            </article>
+              <h3 class="font-bold text-lg">Atención directa</h3>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- De dónde vienen (se llena con el catálogo real) -->
+      <!-- De dónde vienen: tarjetas con foto de cada departamento (js/departamentos.js) -->
       <section class="max-w-[1160px] w-[92%] mx-auto py-16 md:py-20">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
-          <div>
-            <span class="inline-flex px-3.5 py-1.5 rounded-full bg-mesh-blue text-primary font-black text-[0.82rem] mb-4">DE DÓNDE VIENEN</span>
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Textiles de todo Guatemala</h2>
-          </div>
-          <p id="resumen-origen" class="text-on-surface-variant max-w-md"></p>
-        </div>
-        <div id="departamentos" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+        <span class="inline-flex px-3.5 py-1.5 rounded-full bg-mesh-blue text-primary font-black text-[0.82rem] mb-4">DE DÓNDE VIENEN</span>
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-8">Textiles de todo Guatemala</h2>
+        <div id="departamentos" class="grid grid-cols-2 md:grid-cols-4 auto-rows-[170px] md:auto-rows-[200px] gap-3 md:gap-4"></div>
       </section>
 
-      <!-- Cómo trabajamos -->
-      <section class="bg-gradient-to-br from-cool-slate to-inverse-on-surface py-16 md:py-20">
+      <!-- Cómo comprar: 4 pasos con ícono -->
+      <section class="bg-gradient-to-br from-cool-slate to-inverse-on-surface py-14 md:py-16">
         <div class="max-w-[1160px] w-[92%] mx-auto">
-          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-10 text-center">Así es comprar con nosotros</h2>
-          <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            <li class="bg-white/90 rounded-2xl border border-border-cool p-6">
-              <span class="text-4xl font-black text-primary/30">01</span>
-              <h3 class="font-bold text-lg mt-2 mb-1">Explora</h3>
-              <p class="text-sm text-on-surface-variant">Busca en la colección por región, tipo de prenda o color.</p>
+          <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-10 text-center">Comprar es así de fácil</h2>
+          <ol class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            <li class="bg-white rounded-2xl border border-border-cool p-6 text-center">
+              <div class="relative w-16 h-16 mx-auto rounded-2xl bg-mesh-blue text-primary flex items-center justify-center mb-3">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <span class="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-primary text-white text-sm font-black flex items-center justify-center">1</span>
+              </div>
+              <h3 class="font-bold text-lg">Elige</h3>
+              <p class="text-sm text-on-surface-variant">tu prenda favorita</p>
             </li>
-            <li class="bg-white/90 rounded-2xl border border-border-cool p-6">
-              <span class="text-4xl font-black text-primary/30">02</span>
-              <h3 class="font-bold text-lg mt-2 mb-1">Consulta</h3>
-              <p class="text-sm text-on-surface-variant">Escríbenos por WhatsApp y te confirmamos precio, medidas y disponibilidad.</p>
+            <li class="bg-white rounded-2xl border border-border-cool p-6 text-center">
+              <div class="relative w-16 h-16 mx-auto rounded-2xl bg-tertiary-fixed text-whatsapp flex items-center justify-center mb-3">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>
+                <span class="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-primary text-white text-sm font-black flex items-center justify-center">2</span>
+              </div>
+              <h3 class="font-bold text-lg">Escríbenos</h3>
+              <p class="text-sm text-on-surface-variant">por WhatsApp</p>
             </li>
-            <li class="bg-white/90 rounded-2xl border border-border-cool p-6">
-              <span class="text-4xl font-black text-primary/30">03</span>
-              <h3 class="font-bold text-lg mt-2 mb-1">Confirma</h3>
-              <p class="text-sm text-on-surface-variant">Acordamos la forma de pago y los detalles de tu pedido.</p>
+            <li class="bg-white rounded-2xl border border-border-cool p-6 text-center">
+              <div class="relative w-16 h-16 mx-auto rounded-2xl bg-secondary-fixed text-secondary flex items-center justify-center mb-3">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>
+                <span class="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-primary text-white text-sm font-black flex items-center justify-center">3</span>
+              </div>
+              <h3 class="font-bold text-lg">Paga</h3>
+              <p class="text-sm text-on-surface-variant">como prefieras</p>
             </li>
-            <li class="bg-white/90 rounded-2xl border border-border-cool p-6">
-              <span class="text-4xl font-black text-primary/30">04</span>
-              <h3 class="font-bold text-lg mt-2 mb-1">Recibe</h3>
-              <p class="text-sm text-on-surface-variant">Enviamos a diferentes departamentos de Guatemala y te damos seguimiento.</p>
+            <li class="bg-white rounded-2xl border border-border-cool p-6 text-center">
+              <div class="relative w-16 h-16 mx-auto rounded-2xl bg-primary-fixed text-primary flex items-center justify-center mb-3">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+                <span class="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-primary text-white text-sm font-black flex items-center justify-center">4</span>
+              </div>
+              <h3 class="font-bold text-lg">Recíbela</h3>
+              <p class="text-sm text-on-surface-variant">en tu casa</p>
             </li>
           </ol>
         </div>
       </section>
 
-      <!-- Las manos detrás de cada pieza -->
+      <!-- Las manos detrás de cada pieza: foto de fondo -->
       <!-- EQUIPO: si las artesanas o cooperativas están de acuerdo, aquí se pueden agregar
-           tarjetas con su foto, nombre, comunidad y una frase. Pidan siempre su permiso. -->
+           tarjetas con su foto, nombre y comunidad. Pidan siempre su permiso. -->
       <section class="max-w-[1160px] w-[92%] mx-auto py-16 md:py-20">
-        <div class="rounded-3xl bg-white border border-border-cool p-8 md:p-12 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-8 items-center">
-          <div>
-            <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">Las manos detrás de cada pieza</h2>
-            <p class="text-on-surface-variant text-lg max-w-2xl">
-              Detrás de cada huipil, corte y faja hay tejedoras y bordadoras que mantienen viva la tradición. Comprar un textil
-              artesanal es también reconocer su trabajo y su conocimiento.
-            </p>
-          </div>
-          <div class="flex flex-col sm:flex-row md:flex-col gap-3">
-            <a href="./productos.html" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-primary text-white font-bold hover:bg-primary-container">Ver la colección</a>
-            <button type="button" onclick="abrirWhatsApp()" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-whatsapp text-white font-bold hover:brightness-105">Escríbenos</button>
+        <div class="relative overflow-hidden rounded-3xl min-h-[340px] flex items-end">
+          <img src="./img/traje-12.jpeg" alt="Detalle de un traje bordado" class="absolute inset-0 w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-r from-deep-indigo/95 via-deep-indigo/70 to-transparent"></div>
+          <div class="relative p-8 md:p-12 text-white max-w-xl">
+            <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6">Hecho a mano, con historia.</h2>
+            <div class="flex flex-wrap gap-3">
+              <a href="./productos.html" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-primary text-white font-bold hover:bg-primary-container">Ver la colección</a>
+              <button type="button" onclick="abrirWhatsApp()" class="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-whatsapp text-white font-bold hover:brightness-105">Escríbenos</button>
+            </div>
           </div>
         </div>
+        <!-- Créditos de las fotos de paisajes (obligatorio por su licencia) -->
+        <p class="mt-8 text-xs text-on-surface-variant/80 leading-relaxed">
+          Fotos de paisajes: Wikimedia Commons. <span id="creditos-fotos"></span>
+        </p>
       </section>
     </main>
 
@@ -176,35 +194,18 @@
     <script src="./js/layout.js"></script>
     <script src="./js/producto.js"></script>
     <script src="./js/datos.js"></script>
+    <script src="./js/departamentos.js"></script>
     <script>
-      // Departamentos de origen, calculados con el catálogo real
+      // Cifras y tarjetas de departamentos, calculadas con el catálogo real
       (async function () {
         const productos = await cargarProductos();
-        const conteo = new Map();
-        productos.forEach((p) => {
-          if (!p.departamento) return;
-          const d = conteo.get(p.departamento) || { piezas: 0, municipios: new Set() };
-          d.piezas++;
-          if (p.municipio) d.municipios.add(p.municipio);
-          conteo.set(p.departamento, d);
-        });
-        const lista = [...conteo.entries()].sort((a, b) => b[1].piezas - a[1].piezas);
-        const municipios = new Set(productos.map((p) => p.municipio).filter(Boolean));
-
-        document.getElementById("resumen-origen").textContent =
-          `Nuestra colección reúne piezas de ${municipios.size} municipios en ${lista.length} departamentos del país.`;
-
-        const escapar = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
-        document.getElementById("departamentos").innerHTML = lista
-          .map(
-            ([nombre, d]) => `
-            <a href="./productos.html?departamento=${encodeURIComponent(nombre)}" class="group bg-white rounded-2xl border border-border-cool p-5 hover:border-primary hover:-translate-y-0.5 transition-all">
-              <p class="font-bold group-hover:text-primary">${escapar(nombre)}</p>
-              <p class="text-sm text-on-surface-variant mt-1">${d.piezas} pieza${d.piezas === 1 ? "" : "s"} · ${d.municipios.size} municipio${d.municipios.size === 1 ? "" : "s"}</p>
-            </a>`
-          )
-          .join("");
+        const contar = (campo) => new Set(productos.map((p) => p[campo]).filter(Boolean)).size;
+        document.getElementById("cifra-piezas").textContent = productos.length;
+        document.getElementById("cifra-municipios").textContent = contar("municipio");
+        document.getElementById("cifra-departamentos").textContent = contar("departamento");
+        document.getElementById("departamentos").innerHTML = tarjetasDepartamentos(productos, { destacar: true });
       })();
+      document.getElementById("creditos-fotos").innerHTML = creditosFotosDepartamentos();
     </script>
   </body>
 </html>
