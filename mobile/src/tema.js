@@ -1,31 +1,33 @@
-// Colores del diseño, los mismos de la web (frontend/tailwind.config.js)
+// Colores del diseño, los mismos de la web (paleta "tintes naturales" de
+// frontend/tailwind.config.js). Regla 60-30-10: fondo algodón, cacao en la
+// cabecera y terracota solo para las acciones.
 export const colores = {
-  primario: "#00647c",
-  primarioClaro: "#007f9d",
-  secundario: "#4b41e1",
-  terciario: "#00685f",
-  terciarioFondo: "#d4f7f2",
-  indigo: "#1e1b4b",
-  indigoMedio: "#1a2f6b",
-  celeste: "#6cd3f7",
-  fondo: "#faf8ff",
-  fondoSuave: "#f2f3ff",
-  azulSuave: "#e0f2fe",
+  primario: "#B4452D", // terracota: botones y acciones
+  primarioOscuro: "#923521", // terracota al presionar
+  secundario: "#5A3526", // cacao: enlaces e íconos
+  terciario: "#2F6B4F", // jade: categorías
+  terciarioFondo: "#DCEFE3",
+  cacaoOscuro: "#2B1D17", // cabecera
+  cacao: "#5A3526",
+  maiz: "#E8A33D", // acentos sobre fondos oscuros
+  fondo: "#FBF7F1", // algodón
+  fondoSuave: "#F5EEE4",
+  durazno: "#FBEBD8", // fondo de etiquetas
   superficie: "#ffffff",
-  texto: "#131b2e",
-  textoSuave: "#3e484d",
-  borde: "#e2e8f0",
-  contorno: "#6e797e",
-  whatsapp: "#25d366",
-  error: "#ba1a1a",
+  texto: "#2A211B",
+  textoSuave: "#5C4F45",
+  borde: "#E8DDCF",
+  contorno: "#8A7B6E",
+  whatsapp: "#17834A",
+  error: "#C62828",
 };
 
 // Franja de colores inspirada en los tejidos (igual que bajo la cabecera web)
-export const franjaTextil = ["#ba1a1a", "#f59e0b", "#00685f", "#6cd3f7", "#4b41e1", "#db2777", "#f59e0b"];
+export const franjaTextil = ["#B4452D", "#E8A33D", "#2F6B4F", "#1F3A5F", "#D9772F", "#6B3A5E"];
 
 export const sombra = {
-  shadowColor: "#4f46e5",
-  shadowOpacity: 0.08,
+  shadowColor: "#6E3C1E",
+  shadowOpacity: 0.1,
   shadowRadius: 16,
   shadowOffset: { width: 0, height: 6 },
   elevation: 3,

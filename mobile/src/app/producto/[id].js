@@ -8,6 +8,7 @@ import BotonWhatsApp from "../../components/BotonWhatsApp";
 import TarjetaProducto from "../../components/TarjetaProducto";
 import { consultarProducto, urlImagen, urlProducto } from "../../config";
 import { useCatalogo } from "../../datos/CatalogoContext";
+import { colorDepartamento } from "../../datos/departamentos";
 import { colores } from "../../tema";
 import { normalizar } from "../../utils/texto";
 
@@ -40,6 +41,9 @@ export default function DetalleProducto() {
     );
   }
 
+  // Color del departamento (igual que en la web): franja bajo la foto y etiqueta
+  const colorDepto = colorDepartamento(producto.departamento);
+
   const compartir = () =>
     Share.share({
       message: `${producto.nombre} - RaícesGT\n${urlProducto(producto.id)}`,
@@ -57,6 +61,7 @@ export default function DetalleProducto() {
     <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
       <Stack.Screen options={{ title: producto.categoria }} />
       <Image source={{ uri: urlImagen(producto.imagen) }} style={estilos.foto} contentFit="cover" transition={200} />
+      <View style={[estilos.franjaDepto, { backgroundColor: colorDepto }]} />
 
       <View style={estilos.cuerpo}>
         <View style={estilos.etiquetas}>
@@ -67,10 +72,10 @@ export default function DetalleProducto() {
             <Text style={[estilos.textoEtiqueta, { color: colores.terciario }]}>{producto.categoria.toUpperCase()}</Text>
           </Pressable>
           <Pressable
-            style={[estilos.etiqueta, { backgroundColor: colores.azulSuave }]}
+            style={[estilos.etiqueta, { backgroundColor: colorDepto }]}
             onPress={() => router.push({ pathname: "/catalogo", params: { departamento: normalizar(producto.departamento), categoria: "" } })}
           >
-            <Text style={[estilos.textoEtiqueta, { color: colores.primario }]}>{producto.departamento}</Text>
+            <Text style={[estilos.textoEtiqueta, { color: "#fff" }]}>{producto.departamento}</Text>
           </Pressable>
         </View>
 
@@ -111,6 +116,7 @@ export default function DetalleProducto() {
 
 const estilos = StyleSheet.create({
   foto: { width: "100%", aspectRatio: 4 / 5, backgroundColor: colores.fondoSuave },
+  franjaDepto: { height: 6 },
   cuerpo: { padding: 20 },
   etiquetas: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 12 },
   etiqueta: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 999 },

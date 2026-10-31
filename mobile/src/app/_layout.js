@@ -8,7 +8,7 @@ import { colores } from "../tema";
 function FondoCabecera() {
   return (
     <LinearGradient
-      colors={[colores.indigo, colores.indigoMedio, colores.primario]}
+      colors={[colores.cacaoOscuro, colores.cacao]}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
       style={{ flex: 1 }}

@@ -5,25 +5,27 @@ import { useMemo } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import BotonWhatsApp from "../../components/BotonWhatsApp";
+import TarjetaDepartamento from "../../components/TarjetaDepartamento";
 import TarjetaProducto from "../../components/TarjetaProducto";
 import { abrirWhatsApp, urlImagen } from "../../config";
 import { useCatalogo } from "../../datos/CatalogoContext";
+import { departamentosConPiezas } from "../../datos/departamentos";
 import { colores, sombra } from "../../tema";
-import { opcionesUnicas } from "../../utils/texto";
 
 const RECIENTES = 4;
 
+// Mismos textos cortos que la web
 const BENEFICIOS = [
-  { icono: "car-outline", titulo: "Envíos nacionales", texto: "Enviamos a diferentes departamentos de Guatemala." },
-  { icono: "shield-checkmark-outline", titulo: "Entrega segura", texto: "Coordinamos la entrega y te damos seguimiento." },
-  { icono: "headset-outline", titulo: "Atención directa", texto: "Consulta medidas, precio y disponibilidad." },
+  { icono: "car-outline", titulo: "Envíos a toda Guatemala" },
+  { icono: "shield-checkmark-outline", titulo: "Entrega segura" },
+  { icono: "logo-whatsapp", titulo: "Atención directa" },
 ];
 
 export default function Inicio() {
   const { productos } = useCatalogo();
 
   const recientes = useMemo(() => [...productos].sort((a, b) => b.id - a.id).slice(0, RECIENTES), [productos]);
-  const departamentos = useMemo(() => opcionesUnicas(productos.map((p) => p.departamento)), [productos]);
+  const regiones = useMemo(() => departamentosConPiezas(productos).slice(0, 4), [productos]);
   const destacado = productos.find((p) => p.id === 1) || productos[0];
 
   return (
@@ -34,10 +36,7 @@ export default function Inicio() {
         <Text style={estilos.titular}>
           Viste la <Text style={{ color: colores.primario }}>tradición</Text> a tu manera.
         </Text>
-        <Text style={estilos.parrafo}>
-          Descubre trajes típicos llenos de color, diseño y significado. Piezas seleccionadas para conservar la esencia de
-          nuestras tradiciones.
-        </Text>
+        <Text style={estilos.parrafo}>Trajes típicos llenos de color y significado.</Text>
         {destacado ? (
           <Image source={{ uri: urlImagen(destacado.imagen) }} style={estilos.fotoPortada} contentFit="cover" transition={200} />
         ) : null}
@@ -66,18 +65,19 @@ export default function Inicio() {
         </View>
       </View>
 
-      {/* Por departamento */}
+      {/* Compra por región: foto de cada departamento */}
       <View style={estilos.seccion}>
-        <Text style={estilos.tituloSeccion}>Explora por departamento</Text>
-        <View style={estilos.chips}>
-          {departamentos.map((d) => (
-            <Pressable
-              key={d.valor}
-              style={({ pressed }) => [estilos.chip, pressed && { backgroundColor: colores.azulSuave }]}
-              onPress={() => router.push({ pathname: "/catalogo", params: { departamento: d.valor } })}
-            >
-              <Text style={estilos.textoChip}>{d.texto}</Text>
-            </Pressable>
+        <View style={estilos.encabezadoSeccion}>
+          <Text style={estilos.tituloSeccion}>¿De dónde lo quieres?</Text>
+          <Pressable onPress={() => router.push("/nosotros")} hitSlop={8}>
+            <Text style={estilos.verTodo}>Ver todas</Text>
+          </Pressable>
+        </View>
+        <View style={estilos.cuadricula}>
+          {regiones.map((d) => (
+            <View key={d.nombre} style={estilos.celda}>
+              <TarjetaDepartamento departamento={d} />
+            </View>
           ))}
         </View>
       </View>
@@ -85,17 +85,16 @@ export default function Inicio() {
       {/* Compra con confianza */}
       <View style={estilos.seccion}>
         <Text style={estilos.tituloSeccion}>Compra con confianza</Text>
-        {BENEFICIOS.map((b) => (
-          <View key={b.titulo} style={estilos.beneficio}>
-            <View style={estilos.iconoBeneficio}>
-              <Ionicons name={b.icono} size={24} color={colores.secundario} />
-            </View>
-            <View style={{ flex: 1 }}>
+        <View style={estilos.beneficios}>
+          {BENEFICIOS.map((b) => (
+            <View key={b.titulo} style={estilos.beneficio}>
+              <View style={estilos.iconoBeneficio}>
+                <Ionicons name={b.icono} size={26} color="#fff" />
+              </View>
               <Text style={estilos.tituloBeneficio}>{b.titulo}</Text>
-              <Text style={estilos.textoBeneficio}>{b.texto}</Text>
             </View>
-          </View>
-        ))}
+          ))}
+        </View>
         <Pressable style={({ pressed }) => [estilos.enlaceNosotros, pressed && { opacity: 0.7 }]} onPress={() => router.push("/nosotros")}>
           <Text style={estilos.textoEnlace}>Conoce nuestra historia</Text>
           <Ionicons name="arrow-forward" size={16} color={colores.secundario} />
@@ -142,37 +141,27 @@ const estilos = StyleSheet.create({
   verTodo: { color: colores.secundario, fontWeight: "700", marginBottom: 14 },
   cuadricula: { flexDirection: "row", flexWrap: "wrap", marginHorizontal: -6 },
   celda: { width: "50%", padding: 6 },
-  chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  chip: {
-    paddingHorizontal: 14,
-    paddingVertical: 9,
-    borderRadius: 999,
-    backgroundColor: colores.superficie,
-    borderWidth: 1,
-    borderColor: colores.borde,
-  },
-  textoChip: { color: colores.primario, fontWeight: "600" },
+  beneficios: { flexDirection: "row", gap: 10 },
   beneficio: {
-    flexDirection: "row",
-    gap: 14,
+    flex: 1,
     alignItems: "center",
+    gap: 10,
     backgroundColor: colores.superficie,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: colores.borde,
-    padding: 16,
-    marginBottom: 10,
+    paddingVertical: 16,
+    paddingHorizontal: 8,
   },
   iconoBeneficio: {
-    width: 46,
-    height: 46,
-    borderRadius: 12,
-    backgroundColor: "#eef0ff",
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: colores.secundario,
     alignItems: "center",
     justifyContent: "center",
   },
   enlaceNosotros: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingVertical: 10 },
   textoEnlace: { color: colores.secundario, fontWeight: "700" },
-  tituloBeneficio: { fontWeight: "800", color: colores.texto, fontSize: 15 },
-  textoBeneficio: { color: colores.textoSuave, fontSize: 13, marginTop: 2 },
+  tituloBeneficio: { fontWeight: "800", color: colores.texto, fontSize: 13, textAlign: "center" },
 });
